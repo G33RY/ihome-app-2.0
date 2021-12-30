@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ihome/widgets/Header.dart';
 import '/generated/l10n.dart';
 
 class WeatherScreen extends StatefulWidget {
@@ -9,8 +10,13 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green.withOpacity(0.7),
+    return Column(
+      children: const [
+        ScreenHeader(
+          title: "Gödöllő",
+          subtitle: "Clear",
+        ),
+      ],
     );
   }
 }

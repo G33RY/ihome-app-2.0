@@ -21,5 +21,25 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "April": MessageLookupByLibrary.simpleMessage("April"),
+        "August": MessageLookupByLibrary.simpleMessage("August"),
+        "December": MessageLookupByLibrary.simpleMessage("December"),
+        "February": MessageLookupByLibrary.simpleMessage("February"),
+        "Friday": MessageLookupByLibrary.simpleMessage("Friday"),
+        "January": MessageLookupByLibrary.simpleMessage("January"),
+        "July": MessageLookupByLibrary.simpleMessage("July"),
+        "June": MessageLookupByLibrary.simpleMessage("June"),
+        "March": MessageLookupByLibrary.simpleMessage("March"),
+        "May": MessageLookupByLibrary.simpleMessage("May"),
+        "Monday": MessageLookupByLibrary.simpleMessage("Monday"),
+        "November": MessageLookupByLibrary.simpleMessage("November"),
+        "October": MessageLookupByLibrary.simpleMessage("October"),
+        "Saturday": MessageLookupByLibrary.simpleMessage("Saturday"),
+        "September": MessageLookupByLibrary.simpleMessage("September"),
+        "Sunday": MessageLookupByLibrary.simpleMessage("Sunday"),
+        "Thursday": MessageLookupByLibrary.simpleMessage("Thursday"),
+        "Tuesday": MessageLookupByLibrary.simpleMessage("Tuesday"),
+        "Wednesday": MessageLookupByLibrary.simpleMessage("Wednesday")
+      };
 }

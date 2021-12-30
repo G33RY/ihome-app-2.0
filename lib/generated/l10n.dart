@@ -49,6 +49,196 @@ class S {
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
+
+  /// `Monday`
+  String get Monday {
+    return Intl.message(
+      'Monday',
+      name: 'Monday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tuesday`
+  String get Tuesday {
+    return Intl.message(
+      'Tuesday',
+      name: 'Tuesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wednesday`
+  String get Wednesday {
+    return Intl.message(
+      'Wednesday',
+      name: 'Wednesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thursday`
+  String get Thursday {
+    return Intl.message(
+      'Thursday',
+      name: 'Thursday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Friday`
+  String get Friday {
+    return Intl.message(
+      'Friday',
+      name: 'Friday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saturday`
+  String get Saturday {
+    return Intl.message(
+      'Saturday',
+      name: 'Saturday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sunday`
+  String get Sunday {
+    return Intl.message(
+      'Sunday',
+      name: 'Sunday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `January`
+  String get January {
+    return Intl.message(
+      'January',
+      name: 'January',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `February`
+  String get February {
+    return Intl.message(
+      'February',
+      name: 'February',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `March`
+  String get March {
+    return Intl.message(
+      'March',
+      name: 'March',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `April`
+  String get April {
+    return Intl.message(
+      'April',
+      name: 'April',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `May`
+  String get May {
+    return Intl.message(
+      'May',
+      name: 'May',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `June`
+  String get June {
+    return Intl.message(
+      'June',
+      name: 'June',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `July`
+  String get July {
+    return Intl.message(
+      'July',
+      name: 'July',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `August`
+  String get August {
+    return Intl.message(
+      'August',
+      name: 'August',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `September`
+  String get September {
+    return Intl.message(
+      'September',
+      name: 'September',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `October`
+  String get October {
+    return Intl.message(
+      'October',
+      name: 'October',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `November`
+  String get November {
+    return Intl.message(
+      'November',
+      name: 'November',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `December`
+  String get December {
+    return Intl.message(
+      'December',
+      name: 'December',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

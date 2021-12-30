@@ -14,7 +14,7 @@ class ScreenNavigator extends StatefulWidget {
   final TabItemStyle? tabUnselectedStyle;
   final AssetImage? backgroundImage;
 
-  ScreenNavigator({
+  const ScreenNavigator({
     required this.screens,
     this.tabBarBlur,
     this.tabBackgroundColor,

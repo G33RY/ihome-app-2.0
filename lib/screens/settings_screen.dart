@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ihome/widgets/Header.dart';
 import '/generated/l10n.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -9,8 +10,13 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue.withOpacity(0.7),
+    return Column(
+      children: const [
+        ScreenHeader(
+          title: "Settings",
+          subtitle: "",
+        ),
+      ],
     );
   }
 }
