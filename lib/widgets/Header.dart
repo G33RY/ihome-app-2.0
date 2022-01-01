@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ihome/helpers/constants.dart';
-import 'package:ihome/helpers/ihome_api.dart';
+import 'package:ihome/models/api/weather.dart';
+import 'package:ihome/models/constants.dart';
 import '/generated/l10n.dart';
 
 class ScreenHeader extends StatefulWidget {

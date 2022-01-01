@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:ihome/helpers/constants.dart';
 import 'package:ihome/helpers/utils.dart';
+import 'package:ihome/models/constants.dart';
 import 'package:ihome/models/setting.dart';
 import 'package:ihome/screens/home_screen.dart';
 import 'package:ihome/widgets/screen_navigator.dart';

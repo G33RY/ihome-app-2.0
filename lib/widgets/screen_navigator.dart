@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ihome/helpers/constants.dart';
+import 'package:ihome/models/constants.dart';
 import 'package:ihome/widgets/custom_tab_bar.dart';
 import 'package:ihome/widgets/page_control.dart';
 import '/generated/l10n.dart';
@@ -82,7 +82,9 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
                 controller: controller,
                 physics: const BouncingScrollPhysics(),
                 children: widget.screens.map((e) {
-                  return e.screen;
+                  return SingleChildScrollView(
+                    child: e.screen,
+                  );
                 }).toList(),
               ),
             ),

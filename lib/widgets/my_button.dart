@@ -6,6 +6,7 @@ import 'package:ihome/helpers/utils.dart';
 class MyButton extends StatefulWidget {
   final Widget child;
   final void Function()? onTap;
+  final void Function()? onLongTap;
   final void Function()? onDoubleTap;
   final EdgeInsets? padding;
   final EdgeInsets? margin;
@@ -17,6 +18,7 @@ class MyButton extends StatefulWidget {
     Key? key,
     required this.child,
     this.onTap,
+    this.onLongTap,
     this.onDoubleTap,
     this.padding,
     this.margin,
@@ -65,6 +67,7 @@ class _MyButtonState extends State<MyButton> with TickerProviderStateMixin {
     return GestureDetector(
       onTapDown: (details) => _controller.reverse(),
       onTapUp: (details) => _controller.forward(from: 0.0),
+      onLongPress: () => widget.onLongTap?.call(),
       onTap: () async {
         if (Utils.canVibrate) {
           Vibrate.feedback(widget.feedbackType);

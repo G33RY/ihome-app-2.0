@@ -3,8 +3,10 @@ import 'package:ihome/generated/l10n.dart';
 
 mixin MyColors {
   static const Color orange = Color.fromRGBO(255, 159, 10, 1);
+  static const Color smokewhite = Color.fromRGBO(235, 235, 245, 1);
   static const Color white60 = Color.fromRGBO(255, 255, 255, 0.6);
   static const Color gray = Color.fromRGBO(99, 99, 102, 1);
+  static const Color gray60 = Color.fromRGBO(60, 60, 67, 0.6);
 }
 
 enum Months {
