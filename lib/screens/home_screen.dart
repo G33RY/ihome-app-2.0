@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:ihome/models/api/device.dart';
 import 'package:ihome/models/api/scene.dart';
 import 'package:ihome/models/constants.dart';
-import 'package:ihome/widgets/Header.dart';
+import 'package:ihome/widgets/header.dart';
 import 'package:ihome/widgets/device_modal.dart';
+import 'package:ihome/widgets/scene_modal.dart';
 import 'package:ihome/widgets/value_slider.dart';
 import 'package:ihome/widgets/device.dart';
 import 'package:ihome/widgets/my_button.dart';
@@ -59,11 +60,26 @@ class _HomeScreenState extends State<HomeScreen> {
         Section(
           sectionTitle: "Favourite Scenes",
           sectionButtonIcon: CupertinoIcons.add_circled_solid,
+          onTap: () {
+            showSceneModal(
+                context,
+                Scene(
+                  icon: CupertinoIcons.house_fill,
+                  title: "New Scene",
+                ),
+                devices, () {
+              setState(() {});
+            });
+          },
           children: scenes.map((scene) {
             return SceneWidget(
               scene: scene,
-              onTap: (_scene) {},
-              onLongTap: (_scene) {},
+              onTap: () {},
+              onLongTap: () {
+                showSceneModal(context, scene, devices, () {
+                  setState(() {});
+                });
+              },
             );
           }).toList(),
         ),
@@ -76,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 print("change on tap");
               },
               onLongTap: () {
-                showDeviceModal(context, device, (device) {
+                showDeviceModal(context, device, () {
                   setState(() {});
                   print("change on longtap");
                 });

@@ -1,70 +1,54 @@
 import 'package:flutter/cupertino.dart';
+import 'package:ihome/models/api/device.dart';
 
 class Scene {
-  final String id;
-  IconData icon;
-  String title;
-  bool isOn;
+  late IconData _icon;
+  late String _title;
+  late bool _isOn;
+  List<Device> devices = [];
 
   Scene({
-    required this.id,
-    required this.icon,
-    required this.title,
-    required this.isOn,
-  });
+    required IconData icon,
+    required String title,
+    bool isOn = true,
+  }) {
+    _icon = icon;
+    _title = title;
+    _isOn = isOn;
+  }
+
+  IconData get icon => _icon;
+  String get title => _title;
+  bool get isOn => _isOn;
+
+  set isOn(bool value) {}
+
+  set title(String value) {
+    print("Title changed");
+    _title = value;
+  }
+
+  set icon(IconData value) {
+    print("Icon changed");
+    _icon = value;
+  }
+
+  void remove() {
+    print("scene removed");
+  }
+
+  void save() {
+    print("scene saved");
+  }
 
   static Future<List<Scene>> get scenes async {
     return [
       Scene(
-        id: "id",
         icon: CupertinoIcons.tv_fill,
         title: "Movie Mode",
         isOn: true,
       ),
       Scene(
-        id: "id",
-        icon: CupertinoIcons.tv_fill,
-        title: "Movie Mode",
-        isOn: true,
-      ),
-      Scene(
-        id: "id",
-        icon: CupertinoIcons.tv_fill,
-        title: "Movie Mode",
-        isOn: true,
-      ),
-      Scene(
-        id: "id",
-        icon: CupertinoIcons.tv_fill,
-        title: "Movie Mode",
-        isOn: true,
-      ),
-      Scene(
-        id: "id",
-        icon: CupertinoIcons.tv_fill,
-        title: "Movie Mode",
-        isOn: true,
-      ),
-      Scene(
-        id: "id",
-        icon: CupertinoIcons.tv_fill,
-        title: "Movie Mode",
-        isOn: true,
-      ),
-      Scene(
-        id: "id",
-        icon: CupertinoIcons.tv_fill,
-        title: "Movie Mode",
-        isOn: true,
-      ),
-      Scene(
-        id: "id",
-        icon: CupertinoIcons.tv_fill,
-        title: "Movie Mode",
-        isOn: true,
-      ),
-      Scene(
-        id: "id",
         icon: CupertinoIcons.tv_fill,
         title: "Movie Mode",
         isOn: true,

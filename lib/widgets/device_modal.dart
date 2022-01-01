@@ -13,7 +13,7 @@ import '/generated/l10n.dart';
 
 class DeviceModal extends StatefulWidget {
   final Device device;
-  final Function(Device device) onChange;
+  final Function() onChange;
   const DeviceModal({
     required this.device,
     required this.onChange,
@@ -132,7 +132,7 @@ class _DeviceModalState extends State<DeviceModal> {
                               setState(() {
                                 if (light != null) {
                                   light!.color = value;
-                                  widget.onChange.call(light!);
+                                  widget.onChange.call();
                                 }
                               });
                             },
@@ -166,7 +166,6 @@ class _DeviceModalState extends State<DeviceModal> {
                               } else if (!light!.isOn) {
                                 light!.isOn = true;
                               }
-                              widget.onChange.call(light!);
                             } else if (blinds != null) {
                               blinds!.percentage = v;
                               if (v == 0) {
@@ -174,8 +173,8 @@ class _DeviceModalState extends State<DeviceModal> {
                               } else if (!blinds!.isOn) {
                                 blinds!.isOn = true;
                               }
-                              widget.onChange.call(blinds!);
                             }
+                            widget.onChange.call();
                           },
                           value: light?.brightness ?? (blinds?.percentage ?? 0),
                           color: light?.color ?? Colors.white,
@@ -193,8 +192,7 @@ class _DeviceModalState extends State<DeviceModal> {
   }
 }
 
-void showDeviceModal(
-    BuildContext context, Device device, Function(Device device) onChange) {
+void showDeviceModal(BuildContext context, Device device, Function() onChange) {
   showBarModalBottomSheet(
     context: context,
     width: MediaQuery.of(context).size.width * 0.7,

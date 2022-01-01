@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ihome/widgets/Header.dart';
+import 'package:ihome/widgets/header.dart';
 import 'package:ihome/widgets/my_button.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '/generated/l10n.dart';

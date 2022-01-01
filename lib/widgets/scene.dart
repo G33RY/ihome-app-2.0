@@ -6,8 +6,8 @@ import '/generated/l10n.dart';
 
 class SceneWidget extends StatefulWidget {
   final Scene scene;
-  final Function(Scene scene) onTap;
-  final Function(Scene scene) onLongTap;
+  final Function() onTap;
+  final Function() onLongTap;
   const SceneWidget({
     required this.scene,
     required this.onTap,
@@ -63,6 +63,9 @@ class _SceneWidgetState extends State<SceneWidget> {
         setState(() {
           widget.scene.isOn = !widget.scene.isOn;
         });
+      },
+      onLongTap: () {
+        widget.onLongTap.call();
       },
     );
   }

@@ -54,7 +54,7 @@ abstract class Device {
         color: MyColors.orange,
       ),
       Blinds(
-        id: "id",
+        id: "id1",
         title: "Movie Mode",
         isOn: true,
         percentage: 0.6,

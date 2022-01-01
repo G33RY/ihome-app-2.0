@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ihome/widgets/Header.dart';
+import 'package:ihome/widgets/header.dart';
 import 'package:ihome/widgets/value_slider.dart';
 import '/generated/l10n.dart';
 

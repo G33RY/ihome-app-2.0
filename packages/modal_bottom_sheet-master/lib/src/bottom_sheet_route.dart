@@ -19,6 +19,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.expanded = false,
     this.enableDrag = true,
     this.animationCurve,
+    this.onClose,
   })  : assert(expanded != null),
         assert(enableDrag != null),
         super(key: key);
@@ -30,6 +31,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
   final bool enableDrag;
   final AnimationController? secondAnimationController;
   final Curve? animationCurve;
+  final Function? onClose;
 
   @override
   _ModalBottomSheetState<T> createState() => _ModalBottomSheetState<T>();
@@ -109,6 +111,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
                     : null,
                 onClosing: () {
                   if (widget.route.isCurrent) {
+                    widget.onClose?.call();
                     Navigator.of(context).pop();
                   }
                 },
@@ -141,6 +144,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
     required this.expanded,
     this.bounce = false,
     this.animationCurve,
+    this.onClose,
     this.duration,
     RouteSettings? settings,
   })  : assert(expanded != null),
@@ -149,6 +153,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
         super(settings: settings);
 
   final double? closeProgressThreshold;
+  final Function? onClose;
   final WidgetWithChildBuilder? containerBuilder;
   final WidgetBuilder builder;
   final bool expanded;
@@ -200,6 +205,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
       child: _ModalBottomSheet<T>(
         closeProgressThreshold: closeProgressThreshold,
         route: this,
+        onClose: onClose,
         secondAnimationController: secondAnimationController,
         expanded: expanded,
         bounce: bounce,

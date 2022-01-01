@@ -6,7 +6,7 @@ import '/generated/l10n.dart';
 class Section extends StatelessWidget {
   final String sectionTitle;
   final IconData? sectionButtonIcon;
-  final Function? onTap;
+  final Function()? onTap;
   final List<Widget> children;
 
   const Section({
@@ -44,6 +44,7 @@ class Section extends StatelessWidget {
                       size: 30,
                       color: MyColors.smokewhite,
                     ),
+                    onTap: onTap,
                   ),
                 ],
               ],
