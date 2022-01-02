@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ihome/models/api/device.dart';
@@ -12,6 +14,7 @@ import 'package:ihome/widgets/my_button.dart';
 import 'package:ihome/widgets/scene.dart';
 import 'package:ihome/widgets/section.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '/generated/l10n.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,6 +23,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Timer timer;
+  late RefreshController refreshController;
   String title = "";
   String subtitle = "";
   String desc = "";
@@ -28,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    refreshController = RefreshController();
     super.initState();
     setState(() {
       title = "Good Morning!";
@@ -35,22 +41,40 @@ class _HomeScreenState extends State<HomeScreen> {
       desc = "High of 23° and low of 4°,\nlight rain until this evening.";
     });
 
-    Scene.scenes.then((value) {
-      setState(() {
-        scenes = value;
-      });
-    });
+    fetchData();
+    timer = Timer.periodic(const Duration(minutes: 1), (_timer) => fetchData());
+  }
 
-    Device.devices.then((value) {
-      setState(() {
-        devices = value;
-      });
+  Future<void> fetchData() async {
+    List<List<dynamic>> futures = await Future.wait<List<dynamic>>([
+      Scene.scenes,
+      Device.devices,
+    ]);
+
+    setState(() {
+      scenes = futures[0] as List<Scene>;
+      devices = futures[1] as List<Device>;
     });
+  }
+
+  Future<void> _onRefresh() async {
+    await fetchData();
+    refreshController.refreshCompleted();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    refreshController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return SmartRefresher(
+      controller: refreshController,
+      onRefresh: _onRefresh,
+      physics: const ClampingScrollPhysics(),
       child: Column(
         children: [
           ScreenHeader(
@@ -84,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onLongTap: () {
                   showSceneModal(
                     context: context,
-                    scene: scene,
+                    scene: scene.clone(),
                     devices: devices,
                     onSave: (_scene) {
                       setState(() {
