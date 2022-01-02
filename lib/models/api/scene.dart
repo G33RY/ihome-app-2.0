@@ -11,10 +11,12 @@ class Scene {
     required IconData icon,
     required String title,
     bool isOn = true,
+    List<Device>? devices,
   }) {
     _icon = icon;
     _title = title;
     _isOn = isOn;
+    if (devices != null) this.devices = devices;
   }
 
   IconData get icon => _icon;
@@ -55,4 +57,6 @@ class Scene {
       ),
     ];
   }
+
+  Scene clone() => Scene(icon: icon, title: title);
 }

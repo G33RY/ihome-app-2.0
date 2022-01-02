@@ -7,8 +7,8 @@ mixin MyColors {
   static const Color white60 = Color.fromRGBO(255, 255, 255, 0.6);
   static const Color gray = Color.fromRGBO(99, 99, 102, 1);
   static const Color gray60 = Color.fromRGBO(60, 60, 67, 0.6);
-
   static const Color red = Color.fromRGBO(255, 69, 58, 1);
+  static const Color green = Color.fromRGBO(52, 199, 89, 1);
 }
 
 enum Months {

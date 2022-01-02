@@ -62,23 +62,42 @@ class _HomeScreenState extends State<HomeScreen> {
           sectionButtonIcon: CupertinoIcons.add_circled_solid,
           onTap: () {
             showSceneModal(
-                context,
-                Scene(
-                  icon: CupertinoIcons.house_fill,
-                  title: "New Scene",
-                ),
-                devices, () {
-              setState(() {});
-            });
+              context: context,
+              scene: Scene(
+                icon: CupertinoIcons.house_fill,
+                title: "New Scene",
+              ),
+              devices: devices,
+              onSave: (_scene) {
+                setState(() {
+                  scenes.add(_scene);
+                });
+              },
+              onRemove: () {},
+            );
           },
           children: scenes.map((scene) {
             return SceneWidget(
               scene: scene,
               onTap: () {},
               onLongTap: () {
-                showSceneModal(context, scene, devices, () {
-                  setState(() {});
-                });
+                showSceneModal(
+                  context: context,
+                  scene: scene,
+                  devices: devices,
+                  onSave: (_scene) {
+                    setState(() {
+                      scene = _scene;
+                    });
+                  },
+                  onRemove: () {
+                    setState(() {
+                      scenes.removeWhere(
+                        (e) => e == scene,
+                      );
+                    });
+                  },
+                );
               },
             );
           }).toList(),

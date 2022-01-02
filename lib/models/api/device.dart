@@ -44,6 +44,8 @@ abstract class Device {
     _isOn = !isOn;
   }
 
+  Device clone();
+
   static Future<List<Device>> get devices async {
     return [
       Light(
@@ -95,6 +97,10 @@ class Light extends Device {
     print("color changed");
     _color = value;
   }
+
+  @override
+  Light clone() => Light(
+      id: id, title: title, isOn: isOn, color: color, brightness: brightness);
 }
 
 class Blinds extends Device {
@@ -119,4 +125,8 @@ class Blinds extends Device {
     print("percentage changed");
     _percentage = value;
   }
+
+  @override
+  Blinds clone() =>
+      Blinds(id: id, title: title, isOn: isOn, percentage: percentage);
 }

@@ -18,12 +18,14 @@ import '/generated/l10n.dart';
 
 class SceneModal extends StatefulWidget {
   final Scene scene;
-  final Function() onChange;
+  final Function(Scene scene) onSave;
+  final Function() onRemove;
   final List<Device> devices;
   const SceneModal({
     required this.scene,
-    required this.onChange,
+    required this.onSave,
     required this.devices,
+    required this.onRemove,
   });
 
   @override
@@ -40,7 +42,6 @@ class _SceneModalState extends State<SceneModal> {
     titleController = TextEditingController(text: widget.scene.title);
     titleController.addListener(() {
       widget.scene.title = titleController.text;
-      widget.onChange.call();
     });
   }
 
@@ -162,7 +163,6 @@ class _SceneModalState extends State<SceneModal> {
                               onChange: (v) {
                                 setState(() {
                                   widget.scene.icon = v;
-                                  widget.onChange.call();
                                 });
                               },
                             ),
@@ -174,7 +174,7 @@ class _SceneModalState extends State<SceneModal> {
                       child: Column(
                         children: [
                           buildDevices(),
-                          buildRemoveButton(),
+                          buildButtons(),
                         ],
                       ),
                     ),
@@ -289,7 +289,7 @@ class _SceneModalState extends State<SceneModal> {
                 if (isSelected(device)) {
                   widget.scene.devices.removeWhere((e) => e.id == device.id);
                 } else {
-                  widget.scene.devices.add(device);
+                  widget.scene.devices.add(device.clone());
                 }
               });
             },
@@ -299,12 +299,49 @@ class _SceneModalState extends State<SceneModal> {
     );
   }
 
-  Widget buildRemoveButton() {
+  Widget buildButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         MyButton(
-          margin: const EdgeInsets.only(top: 20),
+          margin: const EdgeInsets.only(top: 20, right: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 10,
+          ),
+          boxDecoration: BoxDecoration(
+            color: MyColors.green,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            children: [
+              const Icon(
+                CupertinoIcons.square_arrow_down_fill,
+                size: 18,
+                color: Colors.black,
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 5),
+                child: const Text(
+                  "Save",
+                  style: TextStyle(
+                    fontFamily: "SFCompact",
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          onTap: () {
+            widget.scene.save();
+            widget.onSave.call(widget.scene);
+            Navigator.of(context).pop();
+          },
+        ),
+        MyButton(
+          margin: const EdgeInsets.only(top: 20, left: 10, right: 30),
           padding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 10,
@@ -336,6 +373,7 @@ class _SceneModalState extends State<SceneModal> {
           ),
           onTap: () {
             widget.scene.remove();
+            widget.onRemove.call();
             Navigator.of(context).pop();
           },
         ),
@@ -344,12 +382,13 @@ class _SceneModalState extends State<SceneModal> {
   }
 }
 
-void showSceneModal(
-  BuildContext context,
-  Scene scene,
-  List<Device> devices,
-  Function() onChange,
-) {
+void showSceneModal({
+  required BuildContext context,
+  required Scene scene,
+  required List<Device> devices,
+  required Function(Scene scene) onSave,
+  required Function() onRemove,
+}) {
   showBarModalBottomSheet(
     context: context,
     width: MediaQuery.of(context).size.width * 0.7,
@@ -357,12 +396,11 @@ void showSceneModal(
     builder: (context) {
       return SceneModal(
         scene: scene,
-        onChange: onChange,
+        onSave: onSave,
+        onRemove: onRemove,
         devices: devices,
       );
     },
-    onClose: () {
-      scene.save();
-    },
+    onClose: () {},
   );
 }
