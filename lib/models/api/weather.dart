@@ -2,39 +2,76 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ihome/helpers/cacher.dart';
 
 const Duration cacheDuration = Duration(minutes: 5);
 
 class Weather {
   final int temp;
+  final int? minTemp;
   final IconData icon;
+  final DateTime time;
 
   const Weather({
     required this.temp,
     required this.icon,
+    required this.time,
+    this.minTemp,
   });
 
-  static Weather? lastWeather;
-  static DateTime? lastWeatherRequested;
-  static Future<Weather> get weather async {
-    if (lastWeather == null) return _getWeather();
+  //Current Weather
+  static Future<Weather> get currentWeather async {
+    return Cache.get(
+      key: "currentWeather",
+      func: () async {
+        await Future.delayed(const Duration(seconds: 10));
+        final Weather weather = Weather(
+          temp: 69,
+          icon: CupertinoIcons.sun_max_fill,
+          time: DateTime.now(),
+        );
 
-    if (lastWeatherRequested
-            ?.isBefore(DateTime.now().subtract(cacheDuration)) ??
-        true) {
-      return _getWeather();
-    } else {
-      return lastWeather!;
-    }
+        return weather;
+      },
+    );
   }
 
-  static Future<Weather> _getWeather() async {
-    await Future.delayed(const Duration(seconds: 10));
-    const Weather weather =
-        Weather(temp: 69, icon: CupertinoIcons.sun_max_fill);
+  //Hourly Weather
+  static Future<List<Weather>> get hourlyForecast async {
+    return Cache.get<List<Weather>>(
+      key: "hourlyForecast",
+      func: () async {
+        await Future.delayed(const Duration(seconds: 10));
+        final List<Weather> forecast = [
+          Weather(
+            temp: 69,
+            icon: CupertinoIcons.sun_max_fill,
+            time: DateTime.now(),
+          ),
+        ];
 
-    lastWeather = weather;
-    lastWeatherRequested = DateTime.now();
-    return weather;
+        return forecast;
+      },
+    );
+  }
+
+  //Daily Weather
+  static Future<List<Weather>> get dailyForecast async {
+    return Cache.get<List<Weather>>(
+      key: "dailyForecast",
+      func: () async {
+        await Future.delayed(const Duration(seconds: 10));
+        final List<Weather> forecast = [
+          Weather(
+            temp: 69,
+            minTemp: 10,
+            icon: CupertinoIcons.sun_max_fill,
+            time: DateTime.now(),
+          ),
+        ];
+
+        return forecast;
+      },
+    );
   }
 }

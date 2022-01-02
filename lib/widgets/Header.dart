@@ -29,19 +29,29 @@ class _ScreenHeaderState extends State<ScreenHeader> {
   @override
   void initState() {
     getData();
-    timer = Timer.periodic(const Duration(seconds: 10), (_timer) => getData());
+    timer = Timer.periodic(const Duration(minutes: 5), (_timer) => getData());
     super.initState();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    print("asdasdokjlka skdj aklsd");
     timer.cancel();
     super.dispose();
   }
 
   bool get isLarge => widget.desc == null;
+
+  void getData() {
+    Weather.currentWeather.then((_weather) {
+      if (mounted) {
+        setState(() {
+          weather = _weather;
+          today = DateTime.now();
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,16 +180,5 @@ class _ScreenHeaderState extends State<ScreenHeader> {
         ],
       ),
     );
-  }
-
-  void getData() {
-    Weather.weather.then((_weather) {
-      if (mounted) {
-        setState(() {
-          weather = _weather;
-          today = DateTime.now();
-        });
-      }
-    });
   }
 }
