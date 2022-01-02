@@ -24,7 +24,7 @@ class Weather {
     return Cache.get(
       key: "currentWeather",
       func: () async {
-        await Future.delayed(const Duration(seconds: 10));
+        await Future.delayed(const Duration(seconds: 2));
         final Weather weather = Weather(
           temp: 69,
           icon: CupertinoIcons.sun_max_fill,
@@ -41,7 +41,7 @@ class Weather {
     return Cache.get<List<Weather>>(
       key: "hourlyForecast",
       func: () async {
-        await Future.delayed(const Duration(seconds: 10));
+        await Future.delayed(const Duration(seconds: 2));
         final List<Weather> forecast = [
           Weather(
             temp: 69,
@@ -60,11 +60,11 @@ class Weather {
     return Cache.get<List<Weather>>(
       key: "dailyForecast",
       func: () async {
-        await Future.delayed(const Duration(seconds: 10));
+        await Future.delayed(const Duration(seconds: 2));
         final List<Weather> forecast = [
           Weather(
-            temp: 69,
-            minTemp: 10,
+            temp: 32,
+            minTemp: -30,
             icon: CupertinoIcons.sun_max_fill,
             time: DateTime.now(),
           ),

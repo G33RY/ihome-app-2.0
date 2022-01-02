@@ -29,13 +29,14 @@ class ScreenNavigator extends StatefulWidget {
 
 class _ScreenNavigatorState extends State<ScreenNavigator>
     with SingleTickerProviderStateMixin {
-  int screenIndex = 0;
+  int screenIndex = 1;
   late TabController controller;
 
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: widget.screens.length, vsync: this);
+    controller = TabController(
+        length: widget.screens.length, vsync: this, initialIndex: screenIndex);
     controller.addListener(() {
       setState(() {
         screenIndex = controller.index;
@@ -82,9 +83,7 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
                 controller: controller,
                 physics: const BouncingScrollPhysics(),
                 children: widget.screens.map((e) {
-                  return SingleChildScrollView(
-                    child: e.screen,
-                  );
+                  return e.screen;
                 }).toList(),
               ),
             ),
