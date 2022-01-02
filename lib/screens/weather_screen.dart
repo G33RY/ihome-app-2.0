@@ -26,37 +26,37 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void initState() {
     refreshController = RefreshController();
 
-    getData();
-    timer = Timer.periodic(const Duration(minutes: 10), (_timer) => getData());
+    fetchData();
+    timer =
+        Timer.periodic(const Duration(minutes: 10), (_timer) => fetchData());
     super.initState();
   }
 
   @override
   void dispose() {
     timer.cancel();
+    refreshController.dispose();
     super.dispose();
   }
 
-  Future<void> getData() async {
+  Future<void> fetchData() async {
     List<List<Weather>> futures = await Future.wait<List<Weather>>([
       Weather.hourlyForecast,
       Weather.dailyForecast,
     ]);
 
     setState(() {
-      hourlyForecast = futures[0];
-      dailyForecast = futures[1];
+      if (mounted) {
+        hourlyForecast = futures[0];
+        dailyForecast = futures[1];
+      }
     });
   }
 
-  void _onRefresh() async {
+  Future<void> _onRefresh() async {
     print("refresh");
-    await getData();
+    await fetchData();
     refreshController.refreshCompleted();
-  }
-
-  void _onLoading() async {
-    print("onLoading");
   }
 
   @override
@@ -64,7 +64,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
     return SmartRefresher(
       controller: refreshController,
       onRefresh: _onRefresh,
-      onLoading: _onLoading,
       physics: const ClampingScrollPhysics(),
       child: Column(
         children: [
