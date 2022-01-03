@@ -10,10 +10,12 @@ class ScreenHeader extends StatefulWidget {
   final String title;
   final String subtitle;
   final String? desc;
+  final Weather? weather;
 
   const ScreenHeader({
     required this.title,
     required this.subtitle,
+    required this.weather,
     this.desc,
   });
 
@@ -23,13 +25,17 @@ class ScreenHeader extends StatefulWidget {
 
 class _ScreenHeaderState extends State<ScreenHeader> {
   late Timer timer;
-  Weather? weather;
   DateTime today = DateTime.now();
 
   @override
   void initState() {
-    getData();
-    timer = Timer.periodic(const Duration(minutes: 5), (_timer) => getData());
+    timer = Timer.periodic(const Duration(minutes: 1), (_timer) {
+      setState(() {
+        if (mounted) {
+          today = DateTime.now();
+        }
+      });
+    });
     super.initState();
   }
 
@@ -41,17 +47,6 @@ class _ScreenHeaderState extends State<ScreenHeader> {
   }
 
   bool get isLarge => widget.desc == null;
-
-  void getData() {
-    Weather.currentWeather.then((_weather) {
-      if (mounted) {
-        setState(() {
-          weather = _weather;
-          today = DateTime.now();
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,13 +128,14 @@ class _ScreenHeaderState extends State<ScreenHeader> {
                       Container(
                         margin: const EdgeInsets.only(right: 12),
                         child: Icon(
-                          weather?.icon ?? CupertinoIcons.question_circle_fill,
+                          widget.weather?.icon ??
+                              CupertinoIcons.question_circle_fill,
                           color: MyColors.orange,
                           size: 48,
                         ),
                       ),
                       Text(
-                        "${weather?.temp ?? '- '}°C",
+                        "${widget.weather?.temp ?? '- '}°C",
                         style: TextStyle(
                           fontFamily: "SFCompact",
                           fontSize: 60,

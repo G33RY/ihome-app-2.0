@@ -11,12 +11,36 @@ class Weather {
   final int? minTemp;
   final IconData icon;
   final DateTime time;
+  final DateTime? sunset;
+  final DateTime? sunrise;
+  final int? feels;
+  final int? pressure;
+  final int? humidity;
+  final int? clouds;
+  final int? visibility;
+  final int? windSpeed;
+  final int? windDeg;
+  final String? title;
+  final WeatherType? type;
+  final bool? isNight;
 
   const Weather({
     required this.temp,
     required this.icon,
     required this.time,
     this.minTemp,
+    this.type,
+    this.isNight,
+    this.title,
+    this.feels,
+    this.sunrise,
+    this.sunset,
+    this.pressure,
+    this.humidity,
+    this.clouds,
+    this.visibility,
+    this.windSpeed,
+    this.windDeg,
   });
 
   //Current Weather
@@ -26,7 +50,7 @@ class Weather {
       func: () async {
         await Future.delayed(const Duration(seconds: 2));
         final Weather weather = Weather(
-          temp: 69,
+          temp: 32,
           icon: CupertinoIcons.sun_max_fill,
           time: DateTime.now(),
         );
@@ -47,6 +71,13 @@ class Weather {
             temp: 69,
             icon: CupertinoIcons.sun_max_fill,
             time: DateTime.now(),
+            type: WeatherType.mostlyCloudy,
+          ),
+          Weather(
+            temp: 69,
+            icon: CupertinoIcons.sun_max_fill,
+            time: DateTime.now(),
+            type: WeatherType.mostlyCloudy,
           ),
         ];
 
@@ -64,9 +95,16 @@ class Weather {
         final List<Weather> forecast = [
           Weather(
             temp: 32,
-            minTemp: -30,
+            minTemp: -320,
             icon: CupertinoIcons.sun_max_fill,
             time: DateTime.now(),
+          ),
+          Weather(
+            temp: 32,
+            minTemp: -321,
+            icon: CupertinoIcons.sun_max_fill,
+            time: DateTime.now(),
+            type: WeatherType.misty,
           ),
         ];
 
@@ -74,4 +112,16 @@ class Weather {
       },
     );
   }
+}
+
+enum WeatherType {
+  clear,
+  fewClouds,
+  mostlyCloudy,
+  cloudy,
+  showerRain,
+  rain,
+  thunderstorm,
+  snow,
+  misty
 }

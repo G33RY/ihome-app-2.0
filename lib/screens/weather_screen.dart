@@ -21,6 +21,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   late RefreshController refreshController;
   List<Weather> hourlyForecast = [];
   List<Weather> dailyForecast = [];
+  Weather? currentWeather;
 
   @override
   void initState() {
@@ -40,21 +41,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   Future<void> fetchData() async {
-    List<List<Weather>> futures = await Future.wait<List<Weather>>([
+    List<dynamic> futures = await Future.wait<dynamic>([
       Weather.hourlyForecast,
       Weather.dailyForecast,
+      Weather.currentWeather,
     ]);
 
-    setState(() {
-      if (mounted) {
-        hourlyForecast = futures[0];
-        dailyForecast = futures[1];
-      }
-    });
+    if (mounted) {
+      setState(() {
+        hourlyForecast = futures[0] as List<Weather>;
+        dailyForecast = futures[1] as List<Weather>;
+        currentWeather = futures[2] as Weather;
+      });
+    }
   }
 
   Future<void> _onRefresh() async {
-    print("refresh");
     await fetchData();
     refreshController.refreshCompleted();
   }
@@ -65,21 +67,24 @@ class _WeatherScreenState extends State<WeatherScreen> {
       controller: refreshController,
       onRefresh: _onRefresh,
       physics: const ClampingScrollPhysics(),
-      child: Column(
-        children: [
-          const ScreenHeader(
-            title: "Gödöllő",
-            subtitle: "Clear",
-          ),
-          Section(
-            sectionTitle: "Next 48 hours",
-            children: hourlyForecast.map((e) => ForecastHour(e)).toList(),
-          ),
-          Section(
-            sectionTitle: "Next 7 days",
-            children: dailyForecast.map((e) => ForecastDay(e)).toList(),
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ScreenHeader(
+              title: "Gödöllő",
+              subtitle: currentWeather?.title ?? 'Unknown',
+              weather: currentWeather,
+            ),
+            Section(
+              sectionTitle: "Next 48 hours",
+              children: hourlyForecast.map((e) => ForecastHour(e)).toList(),
+            ),
+            Section(
+              sectionTitle: "Next 7 days",
+              children: dailyForecast.map((e) => ForecastDay(e)).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }

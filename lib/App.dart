@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ihome/helpers/utils.dart';
+import 'package:ihome/models/api/weather.dart';
 import 'package:ihome/models/constants.dart';
 import 'package:ihome/models/setting.dart';
 import 'package:ihome/screens/home_screen.dart';
@@ -98,6 +101,11 @@ Future<String?> init() async {
     Utils.canVibrate =
         await Vibrate.canVibrate.onError((error, stackTrace) => false);
 
+    Timer.periodic(const Duration(minutes: 5), (timer) {
+      Weather.currentWeather;
+      Weather.hourlyForecast;
+      Weather.dailyForecast;
+    });
     return null;
   } catch (e) {
     if (kDebugMode) {
