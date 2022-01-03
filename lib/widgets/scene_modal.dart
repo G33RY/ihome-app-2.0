@@ -309,30 +309,14 @@ class _SceneModalState extends State<SceneModal> {
             horizontal: 20,
             vertical: 10,
           ),
-          boxDecoration: BoxDecoration(
-            color: MyColors.green,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Row(
-            children: [
-              const Icon(
-                CupertinoIcons.square_arrow_down_fill,
-                size: 18,
-                color: Colors.black,
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 5),
-                child: const Text(
-                  "Save",
-                  style: TextStyle(
-                    fontFamily: "SFCompact",
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ],
+          child: const Text(
+            "Save",
+            style: TextStyle(
+              fontFamily: "SFCompact",
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: CupertinoColors.activeBlue,
+            ),
           ),
           onTap: () {
             widget.scene.save();
@@ -346,30 +330,14 @@ class _SceneModalState extends State<SceneModal> {
             horizontal: 20,
             vertical: 10,
           ),
-          boxDecoration: BoxDecoration(
-            color: MyColors.red,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Row(
-            children: [
-              const Icon(
-                CupertinoIcons.trash_fill,
-                size: 18,
-                color: Colors.white,
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 5),
-                child: const Text(
-                  "Remove",
-                  style: TextStyle(
-                    fontFamily: "SFCompact",
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
+          child: const Text(
+            "Remove",
+            style: TextStyle(
+              fontFamily: "SFCompact",
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: MyColors.red,
+            ),
           ),
           onTap: () {
             widget.scene.remove();

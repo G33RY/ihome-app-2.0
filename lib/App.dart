@@ -10,7 +10,7 @@ import 'package:ihome/models/api/weather.dart';
 import 'package:ihome/models/constants.dart';
 import 'package:ihome/models/setting.dart';
 import 'package:ihome/screens/home_screen.dart';
-import 'package:ihome/widgets/screen_navigator.dart';
+import 'package:ihome/screens/screen_navigator.dart';
 import 'package:ihome/screens/settings_screen.dart';
 import 'package:ihome/screens/weather_screen.dart';
 import 'package:ihome/widgets/custom_tab_bar.dart';
@@ -30,7 +30,7 @@ class _AppState extends State<App> {
     return FutureBuilder(
       future: init(),
       builder: (context, snapshot) {
-        if (snapshot.data == null) {
+        if (snapshot.data == "ok") {
           return ScreenNavigator(
             screens: [
               ScreenInfo(
@@ -106,11 +106,10 @@ Future<String?> init() async {
       Weather.hourlyForecast;
       Weather.dailyForecast;
     });
-    return null;
+    return "ok";
   } catch (e) {
-    if (kDebugMode) {
-      print(e);
-    }
+    print(e);
+
     return e.toString();
   }
 }

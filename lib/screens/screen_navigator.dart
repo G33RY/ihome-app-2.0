@@ -29,7 +29,7 @@ class ScreenNavigator extends StatefulWidget {
 
 class _ScreenNavigatorState extends State<ScreenNavigator>
     with SingleTickerProviderStateMixin {
-  int screenIndex = 1;
+  int screenIndex = 2;
   late TabController controller;
 
   @override
