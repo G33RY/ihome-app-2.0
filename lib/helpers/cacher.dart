@@ -1,11 +1,12 @@
 Map<String, dynamic> _values = {};
 Map<String, DateTime> _times = {};
 
-const Duration defaultCacheDuration = Duration(seconds: 20);
+const Duration defaultCacheDuration = Duration(minutes: 5);
 
 mixin Cache {
   static Future<T> get<T>({
     required String key,
+    bool force = false,
     required Future<T> Function() func,
     Duration? cacheDuration,
   }) async {
@@ -24,11 +25,13 @@ mixin Cache {
       return value;
     }
 
-    if (_times[key]!.isBefore(
-      DateTime.now().subtract(cacheDuration ?? defaultCacheDuration),
-    )) {
+    if (force ||
+        _times[key]!.isBefore(
+          DateTime.now().subtract(cacheDuration ?? defaultCacheDuration),
+        )) {
       _times[key] = DateTime.now();
-      return func.call();
+      _values[key] = await func.call();
+      return _values[key] as T;
     } else {
       return _values[key] as T;
     }

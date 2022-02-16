@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ihome/models/api/api.dart';
 import 'package:ihome/models/api/weather.dart';
 import 'package:ihome/widgets/forecast_day.dart';
 import 'package:ihome/widgets/forecast_hour.dart';
@@ -42,9 +43,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   Future<void> fetchData() async {
     List<dynamic> futures = await Future.wait<dynamic>([
-      Weather.hourlyForecast,
-      Weather.dailyForecast,
-      Weather.currentWeather,
+      Weather.hourlyForecast(),
+      Weather.dailyForecast(),
+      Weather.currentWeather(),
     ]);
 
     if (mounted) {
@@ -67,24 +68,31 @@ class _WeatherScreenState extends State<WeatherScreen> {
       controller: refreshController,
       onRefresh: _onRefresh,
       physics: const ClampingScrollPhysics(),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            ScreenHeader(
-              title: "Gödöllő",
-              subtitle: currentWeather?.title ?? 'Unknown',
-              weather: currentWeather,
+      child: Column(
+        children: [
+          ScreenHeader(
+            title: "Gödöllő",
+            subtitle: currentWeather?.title ?? 'Unknown',
+            weather: currentWeather,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Section(
+                    sectionTitle: "Next 48 hours",
+                    children:
+                        hourlyForecast.map((e) => ForecastHour(e)).toList(),
+                  ),
+                  Section(
+                    sectionTitle: "Next 7 days",
+                    children: dailyForecast.map((e) => ForecastDay(e)).toList(),
+                  ),
+                ],
+              ),
             ),
-            Section(
-              sectionTitle: "Next 48 hours",
-              children: hourlyForecast.map((e) => ForecastHour(e)).toList(),
-            ),
-            Section(
-              sectionTitle: "Next 7 days",
-              children: dailyForecast.map((e) => ForecastDay(e)).toList(),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

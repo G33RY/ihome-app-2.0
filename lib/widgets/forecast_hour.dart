@@ -36,13 +36,13 @@ class ForecastHour extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(bottom: 5, top: 10),
             child: Icon(
-              weather.icon,
+              weather.type.icon,
               size: 45,
               color: MyColors.orange,
             ),
           ),
           Text(
-            "${weather.temp}°C",
+            "${weather.temp.toInt()}°C",
             style: const TextStyle(
               fontFamily: "SFCompact",
               fontSize: 18,

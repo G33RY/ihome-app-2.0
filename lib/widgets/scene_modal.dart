@@ -4,6 +4,7 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:ihome/helpers/utils.dart';
 import 'package:ihome/models/api/device.dart';
 
@@ -105,15 +106,13 @@ class _SceneModalState extends State<SceneModal> {
                   children: [
                     Expanded(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 20,
                               horizontal: 20,
                             ),
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                               bottom: 30,
                               left: 30,
                               right: 30,
@@ -167,6 +166,7 @@ class _SceneModalState extends State<SceneModal> {
                               },
                             ),
                           ),
+                          buildButtons(),
                         ],
                       ),
                     ),
@@ -174,7 +174,6 @@ class _SceneModalState extends State<SceneModal> {
                       child: Column(
                         children: [
                           buildDevices(),
-                          buildButtons(),
                         ],
                       ),
                     ),
@@ -206,14 +205,7 @@ class _SceneModalState extends State<SceneModal> {
         crossAxisAlignment: WrapCrossAlignment.center,
         alignment: WrapAlignment.center,
         children: widget.devices.map((device) {
-          String subtitle = "";
-          if (device.deviceType == DeviceType.light) {
-            Light light = device as Light;
-            subtitle = "${(light.brightness * 100).toInt()}%";
-          } else if (device.deviceType == DeviceType.blinds) {
-            Blinds blinds = device as Blinds;
-            subtitle = "${(blinds.percentage * 100).toInt()}%";
-          }
+          String subtitle = "${((device.percentage ?? 0) * 100).toInt()}";
 
           return MyButton(
             margin: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
@@ -238,7 +230,7 @@ class _SceneModalState extends State<SceneModal> {
                         margin: const EdgeInsets.only(
                             right: 15, bottom: 10, top: 5),
                         child: Icon(
-                          device.icon,
+                          device.type.icon,
                           size: 20,
                           color: device.isOn ? MyColors.orange : MyColors.gray,
                         ),
@@ -258,7 +250,7 @@ class _SceneModalState extends State<SceneModal> {
                   Container(
                     margin: const EdgeInsets.only(bottom: 10),
                     child: Text(
-                      device.title,
+                      device.name,
                       overflow: TextOverflow.clip,
                       maxLines: 1,
                       textAlign: TextAlign.start,
@@ -319,7 +311,13 @@ class _SceneModalState extends State<SceneModal> {
             ),
           ),
           onTap: () {
-            widget.scene.save();
+            try {
+              widget.scene.save();
+            } catch (e) {
+              print(e);
+              Scene.BOX.put(widget.scene.id, widget.scene);
+              widget.scene.save();
+            }
             widget.onSave.call(widget.scene);
             Navigator.of(context).pop();
           },
@@ -357,6 +355,7 @@ void showSceneModal({
   required Function(Scene scene) onSave,
   required Function() onRemove,
 }) {
+  States.popupActive = true;
   showBarModalBottomSheet(
     context: context,
     width: MediaQuery.of(context).size.width * 0.7,
@@ -369,6 +368,8 @@ void showSceneModal({
         devices: devices,
       );
     },
-    onClose: () {},
+    onClose: () {
+      States.popupActive = false;
+    },
   );
 }

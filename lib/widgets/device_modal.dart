@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ihome/helpers/utils.dart';
 import 'package:ihome/models/api/device.dart';
 import 'package:ihome/models/constants.dart';
+import 'package:ihome/widgets/color_picker.dart';
 import 'package:ihome/widgets/my_button.dart';
 import 'package:ihome/widgets/value_slider.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -24,46 +24,43 @@ class DeviceModal extends StatefulWidget {
 }
 
 class _DeviceModalState extends State<DeviceModal> {
-  Map<MaterialColor, String> customColorSwatch = {
-    ColorTools.createPrimarySwatch(Colors.white): "White",
-  };
-  Light? light;
-  Blinds? blinds;
+  List<Color> customColors = [
+    const Color.fromRGBO(255, 000, 064, 1),
+    const Color.fromRGBO(255, 000, 128, 1),
+    const Color.fromRGBO(255, 000, 192, 1),
+    const Color.fromRGBO(255, 000, 255, 1),
+    const Color.fromRGBO(192, 000, 255, 1),
+    const Color.fromRGBO(128, 000, 255, 1),
+    const Color.fromRGBO(064, 000, 255, 1),
+    const Color.fromRGBO(000, 000, 255, 1),
+    const Color.fromRGBO(000, 064, 255, 1),
+    const Color.fromRGBO(000, 128, 255, 1),
+    const Color.fromRGBO(000, 192, 255, 1),
+    const Color.fromRGBO(000, 255, 255, 1),
+    const Color.fromRGBO(000, 255, 192, 1),
+    const Color.fromRGBO(000, 255, 128, 1),
+    const Color.fromRGBO(000, 255, 064, 1),
+    const Color.fromRGBO(000, 255, 000, 1),
+    const Color.fromRGBO(064, 255, 000, 1),
+    const Color.fromRGBO(128, 255, 000, 1),
+    const Color.fromRGBO(192, 255, 000, 1),
+    const Color.fromRGBO(255, 255, 000, 1),
+    const Color.fromRGBO(255, 192, 000, 1),
+    const Color.fromRGBO(255, 128, 000, 1),
+    const Color.fromRGBO(255, 064, 000, 1),
+    const Color.fromRGBO(255, 000, 000, 1),
+    const Color.fromRGBO(255, 255, 255, 1),
+  ].reversed.toList();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    if (widget.device.deviceType == DeviceType.light) {
-      light = widget.device as Light;
-    } else if (widget.device.deviceType == DeviceType.blinds) {
-      blinds = widget.device as Blinds;
-    }
-
-    if (light != null) {
-      Color closestColor = Colors.white;
-      double closestColorValue = closestColor.distanceTo(light!.color);
-
-      Colors.primaries.forEach((color) {
-        final double d = light!.color.distanceTo(color);
-        if (d < closestColorValue) {
-          closestColor = color;
-          closestColorValue = d;
-        }
-        customColorSwatch.addAll({
-          ColorTools.createPrimarySwatch(color): color.hex,
-        });
-      });
-
-      light!.color = closestColor;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 700,
+      height: 600,
       color: Colors.black,
       child: Column(
         children: [
@@ -75,20 +72,18 @@ class _DeviceModalState extends State<DeviceModal> {
                 Container(
                   margin: const EdgeInsets.only(left: 30),
                   child: Icon(
-                    widget.device.icon,
+                    widget.device.type.icon,
                     size: 30,
                     color: MyColors.orange,
                   ),
                 ),
-                Container(
-                  child: Text(
-                    widget.device.title,
-                    style: const TextStyle(
-                      fontFamily: "SFCompact",
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
+                Text(
+                  widget.device.name,
+                  style: const TextStyle(
+                    fontFamily: "SFCompact",
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
                   ),
                 ),
                 MyButton(
@@ -111,78 +106,65 @@ class _DeviceModalState extends State<DeviceModal> {
             ),
           ),
           Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(top: 30),
-              child: Row(
-                children: [
-                  if (light != null) ...[
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.only(top: 40),
+                child: Row(
+                  children: [
                     Expanded(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ColorPicker(
-                            color: light!.color,
-                            enableShadesSelection: false,
-                            pickersEnabled: const {
-                              ColorPickerType.accent: false,
-                              ColorPickerType.primary: false,
-                              ColorPickerType.custom: true,
-                            },
-                            onColorChanged: (Color value) {
-                              setState(() {
-                                if (light != null) {
-                                  light!.color = value;
+                          if (widget.device.color != null) ...[
+                            ColorPicker(
+                              color: widget.device.color,
+                              colors: customColors,
+                              onChange: (Color value) {
+                                setState(() {
+                                  widget.device.color = value;
                                   widget.onChange.call();
-                                }
-                              });
-                            },
-                            borderRadius: 30,
-                            width: 60,
-                            height: 60,
-                            spacing: 20,
-                            runSpacing: 20,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 20,
+                                });
+                              },
+                              borderRadius: 30,
+                              width: 50,
+                              height: 50,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 10,
+                              ),
                             ),
-                            customColorSwatchesAndNames: customColorSwatch,
-                          ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          if (widget.device.percentage != null) ...[
+                            ValueSlider(
+                              width: 200,
+                              height: 400,
+                              onChange: (v) {
+                                widget.device.percentage = v;
+                                if (v == 0) {
+                                  if (widget.device.isOn) {
+                                    widget.device.isOn = false;
+                                  }
+                                } else {
+                                  if (!widget.device.isOn) {
+                                    widget.device.isOn = true;
+                                  }
+                                }
+                                widget.onChange.call();
+                              },
+                              value: widget.device.percentage ?? 0,
+                              color: widget.device.color ?? Colors.white,
+                            ),
+                          ]
                         ],
                       ),
                     ),
                   ],
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ValueSlider(
-                          width: 200,
-                          height: 400,
-                          onChange: (v) {
-                            if (light != null) {
-                              light!.brightness = v;
-                              if (v == 0) {
-                                light!.isOn = false;
-                              } else if (!light!.isOn) {
-                                light!.isOn = true;
-                              }
-                            } else if (blinds != null) {
-                              blinds!.percentage = v;
-                              if (v == 0) {
-                                blinds!.isOn = false;
-                              } else if (!blinds!.isOn) {
-                                blinds!.isOn = true;
-                              }
-                            }
-                            widget.onChange.call();
-                          },
-                          value: light?.brightness ?? (blinds?.percentage ?? 0),
-                          color: light?.color ?? Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           )
@@ -193,12 +175,16 @@ class _DeviceModalState extends State<DeviceModal> {
 }
 
 void showDeviceModal(BuildContext context, Device device, Function() onChange) {
+  States.popupActive = true;
   showBarModalBottomSheet(
     context: context,
     width: MediaQuery.of(context).size.width * 0.7,
     barrierColor: Colors.black.withOpacity(0.2),
     builder: (context) {
       return DeviceModal(device: device, onChange: onChange);
+    },
+    onClose: () {
+      States.popupActive = false;
     },
   );
 }

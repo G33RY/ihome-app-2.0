@@ -31,7 +31,7 @@ class _SceneWidgetState extends State<SceneWidget> {
         color: widget.scene.isOn ? Colors.white : MyColors.white60,
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Container(
+      child: SizedBox(
         width: 200,
         child: Row(
           children: [
@@ -62,6 +62,7 @@ class _SceneWidgetState extends State<SceneWidget> {
       onTap: () {
         setState(() {
           widget.scene.isOn = !widget.scene.isOn;
+          widget.onTap.call();
         });
       },
       onLongTap: () {

@@ -27,13 +27,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
   @override
   Widget build(BuildContext context) {
     String subtitle = "";
-    if (widget.device.deviceType == DeviceType.light) {
-      Light light = widget.device as Light;
-      subtitle = "${(light.brightness * 100).toInt()}%";
-    } else if (widget.device.deviceType == DeviceType.blinds) {
-      Blinds blinds = widget.device as Blinds;
-      subtitle = "${(blinds.percentage * 100).toInt()}%";
-    }
+    subtitle = "${((widget.device.percentage ?? 0) * 100).toInt()}%";
 
     return MyButton(
       margin: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
@@ -45,7 +39,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
         color: widget.device.isOn ? Colors.white : MyColors.white60,
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Container(
+      child: SizedBox(
         width: 120,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +47,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
             Container(
               margin: const EdgeInsets.only(right: 15, bottom: 10, top: 5),
               child: Icon(
-                widget.device.icon,
+                widget.device.type.icon,
                 size: 35,
                 color: widget.device.isOn ? MyColors.orange : MyColors.gray,
               ),
@@ -61,7 +55,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
             Container(
               margin: const EdgeInsets.only(bottom: 10),
               child: Text(
-                widget.device.title,
+                widget.device.name,
                 overflow: TextOverflow.clip,
                 maxLines: 1,
                 textAlign: TextAlign.start,

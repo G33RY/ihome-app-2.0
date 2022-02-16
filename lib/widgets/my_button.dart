@@ -4,12 +4,14 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:ihome/helpers/utils.dart';
 
 class MyButton extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
   final void Function()? onTap;
   final void Function()? onLongTap;
   final void Function()? onDoubleTap;
   final EdgeInsets? padding;
   final EdgeInsets? margin;
+  final double? height;
+  final double? width;
   final BoxDecoration? boxDecoration;
   final FeedbackType feedbackType;
   final bool playSound;
@@ -22,6 +24,8 @@ class MyButton extends StatefulWidget {
     this.onDoubleTap,
     this.padding,
     this.margin,
+    this.height,
+    this.width,
     this.boxDecoration,
     this.feedbackType: FeedbackType.light,
     this.playSound: false,
@@ -78,6 +82,8 @@ class _MyButtonState extends State<MyButton> with TickerProviderStateMixin {
       onTapCancel: () => _controller.forward(from: 0.0),
       onDoubleTap: widget.onDoubleTap,
       child: Container(
+        width: widget.width,
+        height: widget.height,
         padding: widget.padding,
         margin: widget.margin,
         decoration: widget.boxDecoration,

@@ -128,14 +128,14 @@ class _ScreenHeaderState extends State<ScreenHeader> {
                       Container(
                         margin: const EdgeInsets.only(right: 12),
                         child: Icon(
-                          widget.weather?.icon ??
+                          widget.weather?.type.icon ??
                               CupertinoIcons.question_circle_fill,
                           color: MyColors.orange,
                           size: 48,
                         ),
                       ),
                       Text(
-                        "${widget.weather?.temp ?? '- '}°C",
+                        "${widget.weather?.temp.toInt() ?? '- '}°C",
                         style: TextStyle(
                           fontFamily: "SFCompact",
                           fontSize: 60,

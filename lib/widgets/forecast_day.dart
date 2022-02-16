@@ -37,13 +37,13 @@ class ForecastDay extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(bottom: 15, top: 10),
             child: Icon(
-              weather.icon,
+              weather.type.icon,
               size: 45,
               color: MyColors.orange,
             ),
           ),
           Text(
-            "${weather.temp}°C",
+            "${weather.temp.toInt()}°C",
             style: const TextStyle(
               fontFamily: "SFCompact",
               fontSize: 20,
@@ -54,7 +54,7 @@ class ForecastDay extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(top: 10),
             child: Text(
-              "${weather.minTemp}°C",
+              "${weather.minTemp?.toInt()}°C",
               style: const TextStyle(
                 fontFamily: "SFCompact",
                 fontSize: 18,

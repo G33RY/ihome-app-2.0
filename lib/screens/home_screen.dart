@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ihome/models/api/api.dart';
 import 'package:ihome/models/api/device.dart';
 import 'package:ihome/models/api/scene.dart';
 import 'package:ihome/models/api/weather.dart';
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> setHeaderTexts() async {
     final DateTime time = DateTime.now();
-    final List<Weather> dailyForecast = await Weather.dailyForecast;
+    final List<Weather> dailyForecast = await Weather.dailyForecast();
 
     if (!mounted) return;
 
@@ -59,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
       String expected = "";
       if (dailyForecast.length > 1) {
         tomorrowWeather = dailyForecast[1];
-        print(tomorrowWeather);
       }
 
       switch (tomorrowWeather?.type) {
@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (mounted) {
           subtitle = "Tomorrow's forecast:";
           desc =
-              "High of ${tomorrowWeather?.temp ?? '- '}° and low of ${tomorrowWeather?.minTemp ?? '- '}°${expected == "" ? "" : ',\n$expected'}";
+              "High of ${tomorrowWeather?.temp.toInt() ?? '- '}° and low of ${tomorrowWeather?.minTemp?.toInt() ?? '- '}°${expected == "" ? "" : ',\n$expected'}";
         }
       });
     }
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         subtitle = "Today's forecast:";
         desc =
-            "High of ${todayWeather?.temp ?? '- '}° and low of ${todayWeather?.minTemp ?? '- '}°${expected == "" ? "" : ',\n$expected'}";
+            "High of ${todayWeather?.temp.toInt() ?? '- '}° and low of ${todayWeather?.minTemp?.toInt() ?? '- '}°${expected == "" ? "" : ',\n$expected'}";
       });
     }
 
@@ -158,12 +158,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<void> fetchData() async {
+  Future<void> fetchData([bool force = false]) async {
     setHeaderTexts();
     List<dynamic> futures = await Future.wait<dynamic>([
       Scene.scenes,
-      Device.devices,
-      Weather.currentWeather,
+      Device.fetch(),
+      Weather.currentWeather(force),
     ]);
 
     if (!mounted) return;
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onRefresh() async {
-    await fetchData();
+    await fetchData(true);
     refreshController.refreshCompleted();
   }
 
@@ -192,79 +192,89 @@ class _HomeScreenState extends State<HomeScreen> {
       controller: refreshController,
       onRefresh: _onRefresh,
       physics: const ClampingScrollPhysics(),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            ScreenHeader(
-              title: title,
-              subtitle: subtitle,
-              desc: desc,
-              weather: currentWeather,
-            ),
-            Section(
-              sectionTitle: "Favourite Scenes",
-              sectionButtonIcon: CupertinoIcons.add_circled_solid,
-              onTap: () {
-                showSceneModal(
-                  context: context,
-                  scene: Scene(
-                    icon: CupertinoIcons.house_fill,
-                    title: "New Scene",
-                  ),
-                  devices: devices,
-                  onSave: (_scene) {
-                    setState(() {
-                      scenes.add(_scene);
-                    });
-                  },
-                  onRemove: () {},
-                );
-              },
-              children: scenes.map((scene) {
-                return SceneWidget(
-                  scene: scene,
-                  onTap: () {},
-                  onLongTap: () {
+      child: Column(
+        children: [
+          ScreenHeader(
+            title: title,
+            subtitle: subtitle,
+            desc: desc,
+            weather: currentWeather,
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Section(
+                  sectionTitle: "Favourite Scenes",
+                  sectionButtonIcon: CupertinoIcons.add_circled_solid,
+                  onTap: () {
                     showSceneModal(
                       context: context,
-                      scene: scene.clone(),
+                      scene: Scene(
+                        icon: CupertinoIcons.house_fill,
+                        title: "New Scene",
+                      ),
                       devices: devices,
                       onSave: (_scene) {
                         setState(() {
-                          scene = _scene;
+                          scenes.add(_scene);
                         });
                       },
-                      onRemove: () {
-                        setState(() {
-                          scenes.removeWhere(
-                            (e) => e == scene,
-                          );
+                      onRemove: () {},
+                    );
+                  },
+                  children: scenes.map((scene) {
+                    return SceneWidget(
+                      scene: scene,
+                      onTap: () {
+                        scene.run();
+                      },
+                      onLongTap: () {
+                        showSceneModal(
+                          context: context,
+                          scene: scene.clone(),
+                          devices: devices,
+                          onSave: (_scene) {
+                            // scene = _scene;
+                            int index = scenes.indexOf(scene);
+                            scenes = scenes.map((e) {
+                              return e;
+                            }).toList();
+                            if (index > -1) {
+                              setState(() {
+                                scenes[index] = _scene;
+                              });
+                            }
+                          },
+                          onRemove: () {
+                            setState(() {
+                              scenes.removeWhere(
+                                (e) => e == scene,
+                              );
+                            });
+                          },
+                        );
+                      },
+                    );
+                  }).toList(),
+                ),
+                Section(
+                  sectionTitle: "Devices",
+                  children: devices.map((device) {
+                    return DeviceWidget(
+                      device: device,
+                      onTap: () {},
+                      onLongTap: () {
+                        showDeviceModal(context, device, () {
+                          setState(() {});
                         });
                       },
                     );
-                  },
-                );
-              }).toList(),
+                  }).toList(),
+                ),
+              ],
             ),
-            Section(
-              sectionTitle: "Devices",
-              children: devices.map((device) {
-                return DeviceWidget(
-                  device: device,
-                  onTap: () {
-                    print("change on tap");
-                  },
-                  onLongTap: () {
-                    showDeviceModal(context, device, () {
-                      setState(() {});
-                      print("change on longtap");
-                    });
-                  },
-                );
-              }).toList(),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
