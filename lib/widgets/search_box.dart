@@ -35,7 +35,6 @@ class _SearchBoxState extends State<SearchBox> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     setState(() {

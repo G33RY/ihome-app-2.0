@@ -49,7 +49,7 @@ class ModalBottomSheet extends StatefulWidget {
     required this.expanded,
     required this.onClosing,
     required this.child,
-  })   : assert(enableDrag != null),
+  })  : assert(enableDrag != null),
         assert(onClosing != null),
         assert(child != null),
         super(key: key);
@@ -336,7 +336,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet>
     _bounceDragController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
 
-    // Todo: Check if we can remove scroll Controller
     super.initState();
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ihome/MainCubit.dart';
+import 'package:ihome/api/ihomeapi.dart';
 import 'package:ihome/models/weather_current.dart';
 import 'package:ihome/models/weather_type.dart';
 import 'package:ihome/widgets/forecast_day.dart';
@@ -35,7 +36,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   Future<void> _onRefresh() async {
-    // TODO: implement refresh
+    IHOMEAPI.instance?.socket.disconnect();
+    IHOMEAPI.instance?.socket.connect();
     refreshController.refreshCompleted();
   }
 

@@ -61,7 +61,6 @@ class _SceneWidgetState extends State<SceneWidget> {
       ),
       onTap: () {
         setState(() {
-          // TODO: toggle scene
           widget.onTap.call();
         });
       },
