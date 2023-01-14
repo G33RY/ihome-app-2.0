@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ihome/api/ws_events.dart';
+import 'package:ihome/helpers/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:settings_bundle/settings_bundle.dart';
 
 class IHOMEAPI {
   static IHOMEAPI? _instance;
@@ -18,13 +22,28 @@ class IHOMEAPI {
   }
 
   static Future<void> init() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString("authToken") ?? "testkey1234";
-    final wsUrl = prefs.getString("wsUrl") ?? "http://localhost:3333";
+    String token =
+        "cbHN4jKBf1ftwXFTHT3wr0?Z1VFGSaksfyZVSVXsvX9Ag=!K9YWeeimOb7T-h!-9";
+    String wsUrl = "http://192.168.0.5";
+    String baseUrl = "http://192.168.0.5/api";
+
+    if (Platform.isIOS) {
+      token = await SettingsBundle().get<String>('authToken') ?? token;
+      wsUrl = await SettingsBundle().get<String>('wsUrl') ?? wsUrl;
+      baseUrl = await SettingsBundle().get<String>('baseUrl') ?? baseUrl;
+    }
+    if (Platform.isAndroid) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      token = prefs.getString("authToken") ?? token;
+      wsUrl = prefs.getString("wsUrl") ?? wsUrl;
+      baseUrl = prefs.getString("baseUrl") ?? baseUrl;
+      await prefs.setString("token", token);
+      await prefs.setString("wsUrl", wsUrl);
+      await prefs.setString("baseUrl", baseUrl);
+    }
 
     _instance = IHOMEAPI._();
-    _instance!._baseUrl =
-        prefs.getString("baseUrl") ?? "http://localhost:3333/api";
+    _instance!._baseUrl = baseUrl;
     _instance!._authToken = token;
 
     _instance!.socket = IO.io(
