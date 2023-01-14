@@ -23,6 +23,8 @@
 # Flutter/Dart/Pub related
 **/doc/api/
 **/ios/Flutter/.last_build_id
+**/ios/firebase_*.json
+**/android/app/google-services.json
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
