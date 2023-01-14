@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ihome/models/constants.dart';
+import 'package:ihome/helpers/constants.dart';
 import 'package:ihome/widgets/my_button.dart';
 import '/generated/l10n.dart';
 

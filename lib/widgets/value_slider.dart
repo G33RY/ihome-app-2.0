@@ -35,17 +35,21 @@ class _ValueSliderState extends State<ValueSlider> {
                 (details.localPosition.dy.clamp(0, widget.height) /
                     widget.height);
 
-            widget.onChange.call(v);
             setState(() {
               widget.value = v;
             });
+          },
+          onVerticalDragEnd: (details) {
+            widget.onChange.call(widget.value);
+          },
+          onTapUp: (details) {
+            widget.onChange.call(widget.value);
           },
           onTapDown: (details) {
             final double v = 1 -
                 (details.localPosition.dy.clamp(0, widget.height) /
                     widget.height);
 
-            widget.onChange.call(v);
             setState(() {
               widget.value = v;
             });
@@ -68,7 +72,7 @@ class _ValueSliderState extends State<ValueSlider> {
                   child: Text(
                     "${(widget.value * 100).toInt()}%",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: "SFCompact",
                       fontSize: 20,
                       fontWeight: FontWeight.w600,

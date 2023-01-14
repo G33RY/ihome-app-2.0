@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ihome/models/api/api.dart';
-import 'package:ihome/models/api/weather.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ihome/MainCubit.dart';
+import 'package:ihome/models/weather_current.dart';
+import 'package:ihome/models/weather_type.dart';
 import 'package:ihome/widgets/forecast_day.dart';
 import 'package:ihome/widgets/forecast_hour.dart';
 import 'package:ihome/widgets/header.dart';
@@ -18,47 +20,22 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  late Timer timer;
   late RefreshController refreshController;
-  List<Weather> hourlyForecast = [];
-  List<Weather> dailyForecast = [];
-  Weather? currentWeather;
 
   @override
   void initState() {
     refreshController = RefreshController();
-
-    fetchData();
-    timer =
-        Timer.periodic(const Duration(minutes: 10), (_timer) => fetchData());
     super.initState();
   }
 
   @override
   void dispose() {
-    timer.cancel();
     refreshController.dispose();
     super.dispose();
   }
 
-  Future<void> fetchData() async {
-    List<dynamic> futures = await Future.wait<dynamic>([
-      Weather.hourlyForecast(),
-      Weather.dailyForecast(),
-      Weather.currentWeather(),
-    ]);
-
-    if (mounted) {
-      setState(() {
-        hourlyForecast = futures[0] as List<Weather>;
-        dailyForecast = futures[1] as List<Weather>;
-        currentWeather = futures[2] as Weather;
-      });
-    }
-  }
-
   Future<void> _onRefresh() async {
-    await fetchData();
+    // TODO: implement refresh
     refreshController.refreshCompleted();
   }
 
@@ -68,31 +45,38 @@ class _WeatherScreenState extends State<WeatherScreen> {
       controller: refreshController,
       onRefresh: _onRefresh,
       physics: const ClampingScrollPhysics(),
-      child: Column(
-        children: [
-          ScreenHeader(
-            title: "Gödöllő",
-            subtitle: currentWeather?.title ?? 'Unknown',
-            weather: currentWeather,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Section(
-                    sectionTitle: "Next 48 hours",
-                    children:
-                        hourlyForecast.map((e) => ForecastHour(e)).toList(),
-                  ),
-                  Section(
-                    sectionTitle: "Next 7 days",
-                    children: dailyForecast.map((e) => ForecastDay(e)).toList(),
-                  ),
-                ],
+      child: BlocBuilder<MainCubit, MainState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              ScreenHeader(
+                title: "Gödöllő",
+                subtitle: state.weatherCurrent?.desc?.title ?? 'Unknown',
+                weather: state.weatherCurrent,
               ),
-            ),
-          ),
-        ],
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Section(
+                        sectionTitle: "Next 48 hours",
+                        children: state.weatherHourly
+                            .map((e) => ForecastHour(e))
+                            .toList(),
+                      ),
+                      Section(
+                        sectionTitle: "Next 7 days",
+                        children: state.weatherDaily
+                            .map((e) => ForecastDay(e))
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

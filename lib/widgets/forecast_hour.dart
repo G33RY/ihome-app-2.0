@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ihome/models/api/weather.dart';
-import 'package:ihome/models/constants.dart';
+import 'package:ihome/helpers/constants.dart';
+import 'package:ihome/models/weather_hourly.dart';
+import 'package:ihome/models/weather_type.dart';
 import '/generated/l10n.dart';
 
 class ForecastHour extends StatelessWidget {
-  final Weather weather;
+  final WeatherHourly weather;
   const ForecastHour(this.weather);
 
   @override
@@ -25,7 +26,7 @@ class ForecastHour extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "${weather.time.hour.toString().padLeft(2, "0")}:${weather.time.minute.toString().padLeft(2, "0")}",
+            "${weather.date.hour.toString().padLeft(2, "0")}:${weather.date.minute.toString().padLeft(2, "0")}",
             style: const TextStyle(
               fontFamily: "SFCompact",
               fontSize: 18,
@@ -33,16 +34,25 @@ class ForecastHour extends StatelessWidget {
               color: Colors.black,
             ),
           ),
+          Text(
+            _getDay(weather.date, context),
+            style: const TextStyle(
+              fontFamily: "SFCompact",
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
+          ),
           Container(
             margin: const EdgeInsets.only(bottom: 5, top: 10),
             child: Icon(
-              weather.type.icon,
+              weather.desc.icon,
               size: 45,
               color: MyColors.orange,
             ),
           ),
           Text(
-            "${weather.temp.toInt()}°C",
+            "${weather.temp?.toInt() ?? "-"}°C",
             style: const TextStyle(
               fontFamily: "SFCompact",
               fontSize: 18,
@@ -53,5 +63,17 @@ class ForecastHour extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getDay(DateTime date, BuildContext context) {
+    final int today = DateTime.now().day;
+    if (date.day == today) {
+      return "Today";
+    }
+    if (date.day == today + 1) {
+      return "Tomorrow";
+    }
+
+    return WeekDays.values[date.weekday - 1].getTranslation(context);
   }
 }

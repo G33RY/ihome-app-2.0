@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ihome/models/api/scene.dart';
-import 'package:ihome/models/constants.dart';
+import 'package:ihome/helpers/constants.dart';
 import 'package:ihome/widgets/my_button.dart';
+import '../models/scene.dart';
 import '/generated/l10n.dart';
 
 class SceneWidget extends StatefulWidget {
@@ -45,7 +45,7 @@ class _SceneWidgetState extends State<SceneWidget> {
             ),
             Expanded(
               child: Text(
-                widget.scene.title,
+                widget.scene.name,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.start,
                 style: TextStyle(
@@ -61,7 +61,7 @@ class _SceneWidgetState extends State<SceneWidget> {
       ),
       onTap: () {
         setState(() {
-          widget.scene.isOn = !widget.scene.isOn;
+          // TODO: toggle scene
           widget.onTap.call();
         });
       },

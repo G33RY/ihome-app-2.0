@@ -6,9 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ihome/MainCubit.dart';
 import 'package:ihome/helpers/utils.dart';
-import 'package:ihome/models/constants.dart';
-import 'package:ihome/models/setting.dart';
+import 'package:ihome/helpers/constants.dart';
 import 'package:ihome/screens/offline_screen.dart';
 import 'package:ihome/widgets/custom_tab_bar.dart';
 import 'package:ihome/widgets/page_control.dart';
@@ -21,7 +22,7 @@ class ScreenNavigator extends StatefulWidget {
   final TabItemStyle? tabSelectedStyle;
   final TabItemStyle? tabUnselectedStyle;
 
-  const ScreenNavigator({
+  ScreenNavigator({
     required this.screens,
     this.tabBarBlur,
     this.tabBackgroundColor,
@@ -35,19 +36,25 @@ class ScreenNavigator extends StatefulWidget {
 
 class _ScreenNavigatorState extends State<ScreenNavigator>
     with SingleTickerProviderStateMixin {
-  Duration duration = Duration(
-      seconds: int.parse(Setting.getValueByKey("timeout", 15).toString()));
+  Duration duration = const Duration(seconds: 15);
 
   int screenIndex = 0;
   late TabController controller;
   bool inactive = false;
   Timer? inactiveTimer;
   Timer? timer;
+  late MainState state;
   String backgroundImage = "assets/images/bg1.jpg";
 
   @override
   void initState() {
     super.initState();
+
+    state = BlocProvider.of<MainCubit>(context).state;
+
+    duration = Duration(
+      seconds: int.parse(state.getSetting('timeout', 15).toString()),
+    );
 
     controller = TabController(
         length: widget.screens.length, vsync: this, initialIndex: screenIndex);
@@ -57,7 +64,7 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
       });
     });
 
-    List<String> bgs = [
+    final List<String> bgs = [
       "assets/images/bg0.jpg",
       "assets/images/bg2.jpg",
       "assets/images/bg3.jpg",
@@ -74,7 +81,16 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
       });
 
       //Set brightness
-      if (inactive) Utils.setBrightness(calcClockModeBrightness());
+      if (inactive) {
+        Utils.setBrightness(
+          calcClockModeBrightness(
+            forceDim: state.getSetting('force_dim', false) as bool,
+            wakeAt: state.getSetting('wake_at', 6) as int,
+            dimAt: state.getSetting('dim_at', 22) as int,
+            brightness: state.getSetting('brightness', 1.0) as double,
+          ),
+        );
+      }
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     });
   }
@@ -165,7 +181,14 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
   }
 
   onInteraction() {
-    Utils.setBrightness(calcClockModeBrightness());
+    Utils.setBrightness(
+      calcClockModeBrightness(
+        forceDim: state.getSetting('force_dim', false) as bool,
+        wakeAt: state.getSetting('wake_at', 6) as int,
+        dimAt: state.getSetting('dim_at', 22) as int,
+        brightness: state.getSetting('brightness', 1.0) as double,
+      ),
+    );
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     setState(() {
       inactive = false;
@@ -175,13 +198,18 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
     inactiveTimer = Timer(duration, onInactive);
   }
 
-  onInactive() {
+  void onInactive() {
     if (States.popupActive) {
       return;
     }
     double brigthness = 0;
-    if (Setting.getValueByKey("clock_mode", false) == true) {
-      brigthness = calcClockModeBrightness();
+    if (state.getSetting('clock_mode', false) == true) {
+      brigthness = calcClockModeBrightness(
+        forceDim: state.getSetting('force_dim', false) as bool,
+        wakeAt: state.getSetting('wake_at', 6) as int,
+        dimAt: state.getSetting('dim_at', 22) as int,
+        brightness: state.getSetting('brightness', 1) as double,
+      );
     }
     setState(() {
       inactive = true;
@@ -201,62 +229,27 @@ class ScreenInfo {
   );
 }
 
-double calcClockModeBrightness() {
-  double brightness = 1;
-
-  if (Setting.getValueByKey("force_dim", false) == true) {
-    return int.parse(Setting.getValueByKey("brightness", 0).toString()) / 100;
+double calcClockModeBrightness({
+  bool forceDim = false,
+  double brightness = 1,
+  int wakeAt = 6,
+  int dimAt = 22,
+}) {
+  if (forceDim) {
+    return brightness;
   }
 
-  List<int> wakeAtList = Setting.getValueByKey("wake_at", [6, 0]) as List<int>;
-  List<int> dimAtList = Setting.getValueByKey("dim_at", [22, 0]) as List<int>;
-  DateTime now = DateTime.now();
-  if (wakeAtList[0] < dimAtList[0]) {
-    DateTime wakeAt = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      wakeAtList[0],
-      wakeAtList[1],
-    );
-    DateTime dimAt = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      dimAtList[0],
-      dimAtList[1],
-    );
-
-    if (now.isBefore(wakeAt) || now.isAfter(dimAt)) {
-      brightness =
-          int.parse(Setting.getValueByKey("brightness", 0).toString()) / 100;
-      ;
-    } else {
-      brightness = 1;
+  final DateTime now = DateTime.now();
+  if (wakeAt < dimAt) {
+    if (now.hour > wakeAt && now.hour < dimAt) {
+      return 1;
     }
-  } else {
-    DateTime wakeAt = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      wakeAtList[0],
-      wakeAtList[1],
-    );
-    DateTime dimAt = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      dimAtList[0],
-      dimAtList[1],
-    );
-
-    if (now.isBefore(wakeAt) && now.isAfter(dimAt)) {
-      brightness =
-          int.parse(Setting.getValueByKey("brightness", 0).toString()) / 100;
-      ;
-    } else {
-      brightness = 1;
-    }
+    return brightness;
   }
+
+  if (now.hour > wakeAt || now.hour < dimAt) {
+    return 1;
+  }
+
   return brightness;
 }

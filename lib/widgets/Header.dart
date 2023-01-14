@@ -2,15 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ihome/models/api/weather.dart';
-import 'package:ihome/models/constants.dart';
+import 'package:ihome/helpers/constants.dart';
+import 'package:ihome/models/weather_current.dart';
+import 'package:ihome/models/weather_type.dart';
 import '/generated/l10n.dart';
 
 class ScreenHeader extends StatefulWidget {
   final String title;
   final String subtitle;
   final String? desc;
-  final Weather? weather;
+  final WeatherCurrent? weather;
 
   const ScreenHeader({
     required this.title,
@@ -41,7 +42,6 @@ class _ScreenHeaderState extends State<ScreenHeader> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     timer.cancel();
     super.dispose();
   }
@@ -128,14 +128,14 @@ class _ScreenHeaderState extends State<ScreenHeader> {
                       Container(
                         margin: const EdgeInsets.only(right: 12),
                         child: Icon(
-                          widget.weather?.type.icon ??
+                          widget.weather?.desc?.icon ??
                               CupertinoIcons.question_circle_fill,
                           color: MyColors.orange,
                           size: 48,
                         ),
                       ),
                       Text(
-                        "${widget.weather?.temp.toInt() ?? '- '}°C",
+                        "${widget.weather?.temp?.toInt() ?? '- '}°C",
                         style: TextStyle(
                           fontFamily: "SFCompact",
                           fontSize: 60,

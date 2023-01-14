@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:ihome/helpers/constants.dart';
 import 'package:ihome/models/device.dart';
+import 'package:ihome/models/device_group.dart';
 import 'package:ihome/widgets/my_button.dart';
 
-class DeviceWidget extends StatelessWidget {
-  Device device;
+class DeviceGroupWidget extends StatelessWidget {
+  DeviceGroup group;
   final Function() onTap;
   final Function() onLongTap;
 
-  DeviceWidget({
-    required this.device,
+  DeviceGroupWidget({
+    required this.group,
     required this.onTap,
     required this.onLongTap,
   });
@@ -17,9 +18,7 @@ class DeviceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String subtitle = "";
-    if (device.percentage != null) {
-      subtitle = "${(device.percentage! * 100).toInt()}%";
-    }
+    subtitle = "${((group.percentage ?? 0) * 100).toInt()}%";
 
     return MyButton(
       margin: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
@@ -28,7 +27,7 @@ class DeviceWidget extends StatelessWidget {
         horizontal: 25,
       ),
       boxDecoration: BoxDecoration(
-        color: device.isOn ? Colors.white : MyColors.white60,
+        color: group.isOn ? Colors.white : MyColors.white60,
         borderRadius: BorderRadius.circular(15),
       ),
       onTap: onTap,
@@ -41,15 +40,15 @@ class DeviceWidget extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(right: 15, bottom: 10, top: 5),
               child: Icon(
-                device.type.icon,
+                group.type.icon,
                 size: 35,
-                color: device.isOn ? MyColors.orange : MyColors.gray,
+                color: group.isOn ? MyColors.orange : MyColors.gray,
               ),
             ),
             Container(
               margin: const EdgeInsets.only(bottom: 10),
               child: Text(
-                device.name,
+                group.name,
                 overflow: TextOverflow.clip,
                 maxLines: 1,
                 textAlign: TextAlign.start,
@@ -57,7 +56,7 @@ class DeviceWidget extends StatelessWidget {
                   fontFamily: "SFCompact",
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: device.isOn ? Colors.black : MyColors.gray,
+                  color: group.isOn ? Colors.black : MyColors.gray,
                 ),
               ),
             ),
@@ -69,7 +68,7 @@ class DeviceWidget extends StatelessWidget {
                 fontFamily: "SFCompact",
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: device.isOn ? MyColors.gray60 : MyColors.gray,
+                color: group.isOn ? MyColors.gray60 : MyColors.gray,
               ),
             ),
           ],

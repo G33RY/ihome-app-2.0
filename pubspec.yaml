@@ -37,6 +37,12 @@ dependencies:
   wakelock: ^0.6.0+1
   modal_bottom_sheet: 
     path: ./packages/modal_bottom_sheet-master/
+  socket_io_client: ^2.0.1
+  flutter_bloc: ^8.1.1
+  json_annotation: ^4.6.0
+  json_serializable: ^6.3.1
+  firebase_crashlytics: ^3.0.10
+  shared_preferences: ^2.0.16
 
 
 flutter_icons:

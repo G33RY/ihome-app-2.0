@@ -3,59 +3,56 @@ import 'package:flutter/material.dart';
 import 'package:ihome/api/ihomeapi.dart';
 import 'package:ihome/helpers/constants.dart';
 import 'package:ihome/models/device.dart';
+import 'package:ihome/models/device_group.dart';
 import 'package:ihome/widgets/color_picker.dart';
 import 'package:ihome/widgets/my_button.dart';
 import 'package:ihome/widgets/value_slider.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-List<Color> customColors = const [
-  Color.fromRGBO(255, 000, 064, 1),
-  Color.fromRGBO(255, 000, 128, 1),
-  Color.fromRGBO(255, 000, 192, 1),
-  Color.fromRGBO(255, 000, 255, 1),
-  Color.fromRGBO(192, 000, 255, 1),
-  Color.fromRGBO(128, 000, 255, 1),
-  Color.fromRGBO(064, 000, 255, 1),
-  Color.fromRGBO(000, 000, 255, 1),
-  Color.fromRGBO(000, 064, 255, 1),
-  Color.fromRGBO(000, 128, 255, 1),
-  Color.fromRGBO(000, 192, 255, 1),
-  Color.fromRGBO(000, 255, 255, 1),
-  Color.fromRGBO(000, 255, 192, 1),
-  Color.fromRGBO(000, 255, 128, 1),
-  Color.fromRGBO(000, 255, 064, 1),
-  Color.fromRGBO(000, 255, 000, 1),
-  Color.fromRGBO(064, 255, 000, 1),
-  Color.fromRGBO(128, 255, 000, 1),
-  Color.fromRGBO(192, 255, 000, 1),
-  Color.fromRGBO(255, 255, 000, 1),
-  Color.fromRGBO(255, 192, 000, 1),
-  Color.fromRGBO(255, 128, 000, 1),
-  Color.fromRGBO(255, 064, 000, 1),
-  Color.fromRGBO(255, 000, 000, 1),
-  Color.fromRGBO(255, 255, 255, 1),
-].reversed.toList();
-
-class DeviceModal extends StatefulWidget {
-  final Device device;
+class DeviceGroupModal extends StatefulWidget {
+  final DeviceGroup group;
   final Function() onChange;
-  const DeviceModal({
-    required this.device,
+  const DeviceGroupModal({
+    required this.group,
     required this.onChange,
   });
 
   @override
-  State<StatefulWidget> createState() => _DeviceModalState();
+  State<StatefulWidget> createState() => _DeviceGroupModalState();
 }
 
-class _DeviceModalState extends State<DeviceModal> {
-  late Color color;
-  late double percentage;
+class _DeviceGroupModalState extends State<DeviceGroupModal> {
+  List<Color> customColors = [
+    const Color.fromRGBO(255, 000, 064, 1),
+    const Color.fromRGBO(255, 000, 128, 1),
+    const Color.fromRGBO(255, 000, 192, 1),
+    const Color.fromRGBO(255, 000, 255, 1),
+    const Color.fromRGBO(192, 000, 255, 1),
+    const Color.fromRGBO(128, 000, 255, 1),
+    const Color.fromRGBO(064, 000, 255, 1),
+    const Color.fromRGBO(000, 000, 255, 1),
+    const Color.fromRGBO(000, 064, 255, 1),
+    const Color.fromRGBO(000, 128, 255, 1),
+    const Color.fromRGBO(000, 192, 255, 1),
+    const Color.fromRGBO(000, 255, 255, 1),
+    const Color.fromRGBO(000, 255, 192, 1),
+    const Color.fromRGBO(000, 255, 128, 1),
+    const Color.fromRGBO(000, 255, 064, 1),
+    const Color.fromRGBO(000, 255, 000, 1),
+    const Color.fromRGBO(064, 255, 000, 1),
+    const Color.fromRGBO(128, 255, 000, 1),
+    const Color.fromRGBO(192, 255, 000, 1),
+    const Color.fromRGBO(255, 255, 000, 1),
+    const Color.fromRGBO(255, 192, 000, 1),
+    const Color.fromRGBO(255, 128, 000, 1),
+    const Color.fromRGBO(255, 064, 000, 1),
+    const Color.fromRGBO(255, 000, 000, 1),
+    const Color.fromRGBO(255, 255, 255, 1),
+  ].reversed.toList();
+
   @override
   void initState() {
     super.initState();
-    color = widget.device.color ?? Colors.white;
-    percentage = widget.device.percentage ?? 0;
   }
 
   @override
@@ -73,13 +70,13 @@ class _DeviceModalState extends State<DeviceModal> {
                 Container(
                   margin: const EdgeInsets.only(left: 30),
                   child: Icon(
-                    widget.device.type.icon,
+                    widget.group.type.icon,
                     size: 30,
                     color: MyColors.orange,
                   ),
                 ),
                 Text(
-                  widget.device.name,
+                  widget.group.name,
                   style: const TextStyle(
                     fontFamily: "SFCompact",
                     fontSize: 18,
@@ -115,18 +112,15 @@ class _DeviceModalState extends State<DeviceModal> {
                     Expanded(
                       child: Column(
                         children: [
-                          if (widget.device.color != null) ...[
+                          if (widget.group.color != null) ...[
                             ColorPicker(
-                              color: color,
+                              color: widget.group.color,
                               colors: customColors,
                               onChange: (Color value) {
-                                setState(() {
-                                  color = value;
-                                });
                                 IHOMEAPI.instance?.socket.emit(
-                                  "device:state",
+                                  "devicegroup:state",
                                   {
-                                    "id": widget.device.id,
+                                    "id": widget.group.id,
                                     "state": {
                                       "color": {
                                         "red": value.red,
@@ -152,26 +146,24 @@ class _DeviceModalState extends State<DeviceModal> {
                     Expanded(
                       child: Column(
                         children: [
-                          if (widget.device.percentage != null) ...[
+                          if (widget.group.percentage != null) ...[
                             ValueSlider(
-                                width: 200,
-                                height: 400,
-                                onChange: (v) {
-                                  setState(() {
-                                    percentage = v;
-                                  });
-                                  IHOMEAPI.instance?.socket.emit(
-                                    "device:state",
-                                    {
-                                      "id": widget.device.id,
-                                      "state": {
-                                        "percentage": v,
-                                      }
-                                    },
-                                  );
-                                },
-                                value: percentage,
-                                color: color),
+                              width: 200,
+                              height: 400,
+                              onChange: (v) {
+                                IHOMEAPI.instance?.socket.emit(
+                                  "devicegroup:state",
+                                  {
+                                    "id": widget.group.id,
+                                    "state": {
+                                      "percentage": v,
+                                    }
+                                  },
+                                );
+                              },
+                              value: widget.group.percentage!,
+                              color: widget.group.color ?? Colors.white,
+                            ),
                           ]
                         ],
                       ),
@@ -187,14 +179,15 @@ class _DeviceModalState extends State<DeviceModal> {
   }
 }
 
-void showDeviceModal(BuildContext context, Device device, Function() onChange) {
+void showDeviceGroupModal(
+    BuildContext context, DeviceGroup group, Function() onChange) {
   States.popupActive = true;
   showBarModalBottomSheet(
     context: context,
     width: MediaQuery.of(context).size.width * 0.7,
     barrierColor: Colors.black.withOpacity(0.2),
     builder: (context) {
-      return DeviceModal(device: device, onChange: onChange);
+      return DeviceGroupModal(group: group, onChange: onChange);
     },
     onClose: () {
       States.popupActive = false;

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ihome/models/api/weather.dart';
-import 'package:ihome/models/constants.dart';
+import 'package:ihome/helpers/constants.dart';
+import 'package:ihome/models/weather_daily.dart';
+import 'package:ihome/models/weather_type.dart';
 import '/generated/l10n.dart';
 
 class ForecastDay extends StatelessWidget {
-  final Weather weather;
+  final WeatherDaily weather;
 
   const ForecastDay(this.weather);
 
@@ -21,12 +22,12 @@ class ForecastDay extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       constraints: const BoxConstraints(
-        minWidth: 100,
+        minWidth: 180,
       ),
       child: Column(
         children: [
           Text(
-            WeekDays.values[weather.time.weekday - 1].name,
+            WeekDays.values[weather.date.weekday - 1].name,
             style: const TextStyle(
               fontFamily: "SFCompact",
               fontSize: 18,
@@ -37,13 +38,13 @@ class ForecastDay extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(bottom: 15, top: 10),
             child: Icon(
-              weather.type.icon,
+              weather.desc.icon,
               size: 45,
               color: MyColors.orange,
             ),
           ),
           Text(
-            "${weather.temp.toInt()}°C",
+            "${weather.temp?.toInt() ?? "-"}°C",
             style: const TextStyle(
               fontFamily: "SFCompact",
               fontSize: 20,
@@ -54,7 +55,7 @@ class ForecastDay extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(top: 10),
             child: Text(
-              "${weather.minTemp?.toInt()}°C",
+              "${weather.temp_min?.toInt() ?? "-"}°C",
               style: const TextStyle(
                 fontFamily: "SFCompact",
                 fontSize: 18,
