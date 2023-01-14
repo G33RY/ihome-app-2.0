@@ -16,7 +16,7 @@ class MainState {
   WeatherCurrent? weatherCurrent;
   Map<String, dynamic> settings = {};
   List<CryptoToken> cryptoTokens = [];
-  Map<String, dynamic> sensors = {};
+  Map<String, Map<String, dynamic>> sensors = {};
 
   MainState({
     this.scenes = const [],
@@ -47,7 +47,7 @@ class MainState {
     WeatherCurrent? weatherCurrent,
     Map<String, dynamic>? settings,
     List<CryptoToken>? cryptoTokens,
-    Map<String, dynamic>? sensors,
+    Map<String, Map<String, dynamic>>? sensors,
   }) {
     return MainState(
       scenes: scenes ?? this.scenes,
@@ -97,7 +97,7 @@ class MainCubit extends Cubit<MainState> {
     emit(state.copyWith(cryptoTokens: cryptoTokens));
   }
 
-  void setSensors(Map<String, dynamic> sensors) {
+  void setSensors(Map<String, Map<String, dynamic>> sensors) {
     emit(state.copyWith(sensors: sensors));
   }
 

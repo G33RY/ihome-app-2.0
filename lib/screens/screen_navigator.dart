@@ -50,12 +50,6 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
   void initState() {
     super.initState();
 
-    state = BlocProvider.of<MainCubit>(context).state;
-
-    duration = Duration(
-      seconds: int.parse(state.getSetting('timeout', 15).toString()),
-    );
-
     controller = TabController(
         length: widget.screens.length, vsync: this, initialIndex: screenIndex);
     controller.addListener(() {
@@ -87,12 +81,20 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
             forceDim: state.getSetting('force_dim', false) as bool,
             wakeAt: state.getSetting('wake_at', 6) as int,
             dimAt: state.getSetting('dim_at', 22) as int,
-            brightness: state.getSetting('brightness', 1.0) as double,
+            brightness: state.getSetting('brightness', 1) as num,
           ),
         );
       }
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     });
+
+    MainCubit cubit = BlocProvider.of<MainCubit>(context);
+    state = cubit.state;
+
+    duration = Duration(
+      seconds: int.parse(state.getSetting('timeout', 15).toString()),
+    );
+    onInteraction();
   }
 
   @override
@@ -112,6 +114,21 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
         behavior: HitTestBehavior.translucent,
         child: Stack(
           children: [
+            BlocListener<MainCubit, MainState>(
+              listener: (context, state) {
+                setState(() {
+                  this.state = state;
+
+                  duration = Duration(
+                    seconds:
+                        int.parse(state.getSetting('timeout', 15).toString()),
+                  );
+                });
+              },
+              child: Container(
+                color: Colors.transparent,
+              ),
+            ),
             Container(
               decoration: BoxDecoration(
                 color: Colors.black,
@@ -186,7 +203,7 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
         forceDim: state.getSetting('force_dim', false) as bool,
         wakeAt: state.getSetting('wake_at', 6) as int,
         dimAt: state.getSetting('dim_at', 22) as int,
-        brightness: state.getSetting('brightness', 1.0) as double,
+        brightness: state.getSetting('brightness', 1) as num,
       ),
     );
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
@@ -208,7 +225,7 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
         forceDim: state.getSetting('force_dim', false) as bool,
         wakeAt: state.getSetting('wake_at', 6) as int,
         dimAt: state.getSetting('dim_at', 22) as int,
-        brightness: state.getSetting('brightness', 1) as double,
+        brightness: state.getSetting('brightness', 1) as num,
       );
     }
     setState(() {
@@ -231,12 +248,12 @@ class ScreenInfo {
 
 double calcClockModeBrightness({
   bool forceDim = false,
-  double brightness = 1,
+  num brightness = 1,
   int wakeAt = 6,
   int dimAt = 22,
 }) {
   if (forceDim) {
-    return brightness;
+    return brightness.toDouble();
   }
 
   final DateTime now = DateTime.now();
@@ -244,12 +261,12 @@ double calcClockModeBrightness({
     if (now.hour > wakeAt && now.hour < dimAt) {
       return 1;
     }
-    return brightness;
+    return brightness.toDouble();
   }
 
   if (now.hour > wakeAt || now.hour < dimAt) {
     return 1;
   }
 
-  return brightness;
+  return brightness.toDouble();
 }

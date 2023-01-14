@@ -44,7 +44,7 @@ List<IconData> cupertinoIcons = [
   CupertinoIcons.sunset_fill,
   CupertinoIcons.sunrise_fill,
   CupertinoIcons.house_fill,
-  CupertinoIcons.home,
+  CupertinoIcons.house_fill,
   CupertinoIcons.clock_fill,
   CupertinoIcons.tv_fill,
   CupertinoIcons.game_controller_solid,

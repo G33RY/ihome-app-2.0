@@ -54,7 +54,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
               ScreenHeader(
                 title: "Gödöllő",
                 subtitle: state.weatherCurrent?.desc?.title ?? 'Unknown',
-                weather: state.weatherCurrent,
               ),
               Expanded(
                 child: SingleChildScrollView(

@@ -32,7 +32,7 @@ class Scene {
       case "house_fill":
         return CupertinoIcons.house_fill;
       case "home":
-        return CupertinoIcons.home;
+        return CupertinoIcons.house_fill;
       case "clock_fill":
         return CupertinoIcons.clock_fill;
       case "tv_fill":
@@ -54,6 +54,6 @@ class Scene {
       case "zzz":
         return CupertinoIcons.zzz;
     }
-    return CupertinoIcons.home;
+    return CupertinoIcons.house_fill;
   }
 }

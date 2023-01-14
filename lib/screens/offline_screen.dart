@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ihome/MainCubit.dart';
@@ -62,21 +63,52 @@ class _OfflineScreenState extends State<OfflineScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Icon(
-                        state.weatherCurrent?.desc?.icon ?? Icons.error,
-                        size: 60,
-                        color: MyColors.orange,
+                    Container(
+                      margin: const EdgeInsets.only(right: 60),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: Icon(
+                              state.weatherCurrent?.desc?.icon ?? Icons.error,
+                              size: 60,
+                              color: MyColors.orange,
+                            ),
+                          ),
+                          Text(
+                            "${state.weatherCurrent?.temp?.toInt() ?? "-"} °C",
+                            style: const TextStyle(
+                              fontFamily: "SFCompact",
+                              fontSize: 60,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Text(
-                      "${state.weatherCurrent?.temp?.toInt() ?? "-"} °C",
-                      style: const TextStyle(
-                        fontFamily: "SFCompact",
-                        fontSize: 60,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
+                    Container(
+                      margin: const EdgeInsets.only(left: 60),
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(right: 20),
+                            child: Icon(
+                              CupertinoIcons.house_fill,
+                              size: 60,
+                              color: MyColors.orange,
+                            ),
+                          ),
+                          Text(
+                            "${state.sensors['temphum']?['temp'] ?? "-"} °C",
+                            style: const TextStyle(
+                              fontFamily: "SFCompact",
+                              fontSize: 60,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ],

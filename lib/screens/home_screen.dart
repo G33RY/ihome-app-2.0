@@ -117,7 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: title,
                 subtitle: subtitle,
                 desc: desc,
-                weather: state.weatherCurrent,
               ),
               Expanded(
                 child: Column(

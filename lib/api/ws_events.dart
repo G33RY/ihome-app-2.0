@@ -35,9 +35,11 @@ class WsEvents {
     if (data is! Map<String, dynamic>) return;
 
     try {
-      String key = data['key'] as String;
-      Map<String, dynamic> value = data['data'] as Map<String, dynamic>;
-      Map<String, dynamic> sensors = _mainCubit!.state.sensors;
+      final String key = data['key'] as String;
+      final Map<String, dynamic> value = data['data'] as Map<String, dynamic>;
+      final Map<String, Map<String, dynamic>> sensors = {
+        ..._mainCubit?.state.sensors ?? {}
+      };
       sensors[key] = value;
       _mainCubit!.setSensors(sensors);
     } catch (e, t) {
@@ -49,13 +51,16 @@ class WsEvents {
     if (data == null) return;
     if (data is! List<dynamic>) return;
 
-    final Map<String, dynamic> sensors = _mainCubit?.state.sensors ?? {};
+    final Map<String, Map<String, dynamic>> sensors = {
+      ..._mainCubit?.state.sensors ?? {}
+    };
 
     for (final sensor in data) {
       if (sensor is! Map<String, dynamic>) continue;
       try {
-        String key = sensor['key'] as String;
-        Map<String, dynamic> value = sensor['data'] as Map<String, dynamic>;
+        final String key = sensor['key'] as String;
+        final Map<String, dynamic> value =
+            sensor['data'] as Map<String, dynamic>;
         sensors[key] = value;
       } catch (e, t) {
         FirebaseCrashlytics.instance.recordError(e, t);
