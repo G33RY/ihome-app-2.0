@@ -55,6 +55,7 @@ class DeviceGroup {
     }
 
     final dynamic color = state["color"];
+
     if (color is! Map<String, dynamic>) {
       return null;
     }

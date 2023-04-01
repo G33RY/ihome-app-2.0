@@ -75,16 +75,14 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
       });
 
       //Set brightness
-      if (inactive) {
-        Utils.setBrightness(
-          calcClockModeBrightness(
-            forceDim: state.getSetting('force_dim', false) as bool,
-            wakeAt: state.getSetting('wake_at', 6) as int,
-            dimAt: state.getSetting('dim_at', 22) as int,
-            brightness: state.getSetting('brightness', 1) as num,
-          ),
-        );
-      }
+      Utils.setBrightness(
+        calcClockModeBrightness(
+          forceDim: state.getSetting('force_dim', false) as bool,
+          wakeAt: state.getSetting('wake_at', 6) as int,
+          dimAt: state.getSetting('dim_at', 22) as int,
+          brightness: state.getSetting('brightness', 1) as num,
+        ),
+      );
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     });
 

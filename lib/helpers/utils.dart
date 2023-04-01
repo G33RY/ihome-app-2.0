@@ -24,6 +24,7 @@ mixin Utils {
 
   static Future<void> setBrightness(double brightness) async {
     try {
+      print("setBrightness: $brightness");
       await ScreenBrightness().setScreenBrightness(brightness);
     } catch (e) {
       print(e);

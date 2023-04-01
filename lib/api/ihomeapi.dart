@@ -23,24 +23,9 @@ class IHOMEAPI {
 
   static Future<void> init() async {
     String token =
-        "cbHN4jKBf1ftwXFTHT3wr0?Z1VFGSaksfyZVSVXsvX9Ag=!K9YWeeimOb7T-h!-9";
+        "ocOoCur6AKozV0J?5XMjRnOeBtfjLdqKOaFOlR8LOWhcUMck!?XynKF28d/h/?xC";
     String wsUrl = "http://192.168.0.5";
     String baseUrl = "http://192.168.0.5/api";
-
-    if (Platform.isIOS) {
-      token = await SettingsBundle().get<String>('authToken') ?? token;
-      wsUrl = await SettingsBundle().get<String>('wsUrl') ?? wsUrl;
-      baseUrl = await SettingsBundle().get<String>('baseUrl') ?? baseUrl;
-    }
-    if (Platform.isAndroid) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      token = prefs.getString("authToken") ?? token;
-      wsUrl = prefs.getString("wsUrl") ?? wsUrl;
-      baseUrl = prefs.getString("baseUrl") ?? baseUrl;
-      await prefs.setString("token", token);
-      await prefs.setString("wsUrl", wsUrl);
-      await prefs.setString("baseUrl", baseUrl);
-    }
 
     _instance = IHOMEAPI._();
     _instance!._baseUrl = baseUrl;

@@ -22,6 +22,7 @@ void main() async {
       GlobalCupertinoLocalizations.delegate,
       RefreshLocalizations.delegate
     ],
+    debugShowCheckedModeBanner: false,
     // supportedLocales: S.delegate.supportedLocales,
     home: App(),
   ));
