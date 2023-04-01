@@ -9,7 +9,7 @@ This screen was inspired by Apple's Home App. You can set scenes with custom ico
 
 ### Weather Screen
 This screen was inspired by Apple's Weather App. The Hourly Forecast row is scrollable, the next 48 hours' forecast is shown. 
-![](https://i.imgur.com/5LE6kzO.png)
+
 
 ### AFK Screen
 This screen comes up when the users doesn't interact with the screen for a given interval. 
