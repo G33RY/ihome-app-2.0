@@ -1,5 +1,5 @@
 # IHOME APP 2
-A Smart Home Tablet App for Android/IOS developed specially for my house. The REST API that this app uses was developed in Node.js with Adonis.js framework. 
+A Smart Home Tablet App for Android/IOS written in Flutter developed specially for my house. The REST API that this app uses was developed in Node.js with Adonis.js framework. 
 
 
 ![](https://github.com/G33RY/ihome-app-2.0/blob/master/yj0bAXB.gif)
