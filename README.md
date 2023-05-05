@@ -13,4 +13,4 @@ This screen was inspired by Apple's Weather App. The Hourly Forecast row is scro
 
 ### AFK Screen
 This screen comes up when the users doesn't interact with the screen for a given interval. 
-It shows the current outside and room temperature, time, and the selected crypo token/coin. 
+It shows the current outside and room temperature, time, and the selected crypto token/coin. 
