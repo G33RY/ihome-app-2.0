@@ -24,8 +24,8 @@ class IHOMEAPI {
   static Future<void> init() async {
     String token =
         "ocOoCur6AKozV0J?5XMjRnOeBtfjLdqKOaFOlR8LOWhcUMck!?XynKF28d/h/?xC";
-    String wsUrl = "http://192.168.0.5";
-    String baseUrl = "http://192.168.0.5/api";
+    String wsUrl = "http://api.lan";
+    String baseUrl = "http://api.lan/api";
 
     _instance = IHOMEAPI._();
     _instance!._baseUrl = baseUrl;

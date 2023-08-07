@@ -27,8 +27,8 @@ mixin Utils {
       print("setBrightness: $brightness");
       await ScreenBrightness().setScreenBrightness(brightness);
     } catch (e) {
-      print(e);
-      throw 'Failed to set brightness';
+      // print(e);
+      print('Failed to set brightness');
     }
   }
 }

@@ -74,19 +74,20 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
             bgs.length - 1)];
       });
 
-      //Set brightness
-      Utils.setBrightness(
-        calcClockModeBrightness(
-          forceDim: state.getSetting('force_dim', false) as bool,
-          wakeAt: state.getSetting('wake_at', 6) as int,
-          dimAt: state.getSetting('dim_at', 22) as int,
-          brightness: state.getSetting('brightness', 1) as num,
-        ),
+      final double brightness = calcClockModeBrightness(
+        forceDim: state.getSetting('force_dim', false) as bool,
+        wakeAt: state.getSetting('wake_at', 6) as int,
+        dimAt: state.getSetting('dim_at', 22) as int,
+        brightness: state.getSetting('brightness', 1) as num,
       );
+
+      //Set brightness
+      Utils.setBrightness(brightness);
+
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     });
 
-    MainCubit cubit = BlocProvider.of<MainCubit>(context);
+    final MainCubit cubit = BlocProvider.of<MainCubit>(context);
     state = cubit.state;
 
     duration = Duration(
@@ -195,15 +196,15 @@ class _ScreenNavigatorState extends State<ScreenNavigator>
     );
   }
 
-  onInteraction() {
-    Utils.setBrightness(
-      calcClockModeBrightness(
-        forceDim: state.getSetting('force_dim', false) as bool,
-        wakeAt: state.getSetting('wake_at', 6) as int,
-        dimAt: state.getSetting('dim_at', 22) as int,
-        brightness: state.getSetting('brightness', 1) as num,
-      ),
+  void onInteraction() {
+    final double brightness = calcClockModeBrightness(
+      forceDim: state.getSetting('force_dim', false) as bool,
+      wakeAt: state.getSetting('wake_at', 6) as int,
+      dimAt: state.getSetting('dim_at', 22) as int,
+      brightness: state.getSetting('brightness', 1) as num,
     );
+
+    Utils.setBrightness(brightness);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     setState(() {
       inactive = false;

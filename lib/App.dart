@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,7 @@ import 'package:ihome/api/ihomeapi.dart';
 import 'package:ihome/api/ws_events.dart';
 import 'package:ihome/helpers/utils.dart';
 import 'package:ihome/helpers/constants.dart';
+import 'package:ihome/models/device.dart';
 import 'package:ihome/screens/home_screen.dart';
 import 'package:ihome/screens/screen_navigator.dart';
 import 'package:ihome/screens/weather_screen.dart';
@@ -87,8 +89,10 @@ class _AppState extends State<App> {
 
 Future<String?> init() async {
   try {
-    Wakelock.enable();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    if (!kIsWeb) {
+      Wakelock.enable();
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    }
 
     await IHOMEAPI.init(); // Init API
 

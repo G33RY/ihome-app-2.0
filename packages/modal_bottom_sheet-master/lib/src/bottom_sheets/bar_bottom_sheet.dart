@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart'
+    as modal_bottom_sheet;
 import '../../modal_bottom_sheet.dart';
 import '../bottom_sheet_route.dart';
 
@@ -102,7 +103,7 @@ Future<T?> showBarModalBottomSheet<T>({
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(ModalBottomSheetRoute<T>(
+      .push(modal_bottom_sheet.ModalBottomSheetRoute<T>(
     builder: builder,
     bounce: bounce,
     closeProgressThreshold: closeProgressThreshold,
