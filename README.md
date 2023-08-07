@@ -1,16 +1,16 @@
-# ihome
+# IHOME APP 2
+A Smart Home Tablet App for Android/IOS written in Flutter developed specially for my house. The REST API that this app uses was developed in Node.js with Adonis.js framework. 
 
-A new Flutter project.
 
-## Getting Started
+![](https://github.com/G33RY/ihome-app-2.0/blob/master/yj0bAXB.gif)
 
-This project is a starting point for a Flutter application.
+### Home Screen
+This screen was inspired by Apple's Home App. You can set scenes with custom icons and names. 
 
-A few resources to get you started if this is your first Flutter project:
+### Weather Screen
+This screen was inspired by Apple's Weather App. The Hourly Forecast row is scrollable, the next 48 hours' forecast is shown. 
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### AFK Screen
+This screen comes up when the users doesn't interact with the screen for a given interval. 
+It shows the current outside and room temperature, time, and the selected crypto token/coin. 
